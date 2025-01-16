@@ -154,6 +154,56 @@ app.post('/store_details',async function(req,res){
 
 
 });
+
+app.post('/filter', async function(req, res) {
+    const filters = req.body; // Get the filters from the request body
+    console.log("Received filters:", filters);
+  
+    try {
+      const filteredData = await getFilteredData(filters);
+      res.json(filteredData); // Send filtered data back as response
+    } catch (error) {
+      console.error("Error filtering data:", error);
+      res.status(500).send('Server error');
+    }
+  });
+  
+  // Function to get filtered data from Firestore
+  const getFilteredData = async (filters) => {
+    const { state, city, pincode, price } = filters;
+  
+    let query = db.collection('properties'); // Replace 'properties' with your collection name
+  
+    // Apply filters based on provided values
+    if (state && state !== 'all') {
+      query = query.where('state', '==', state);
+    }
+  
+    if (city && city !== 'all') {
+      query = query.where('city', '==', city);
+    }
+  
+    if (pincode && pincode !== '') {
+      query = query.where('pincode', '==', pincode);
+    }
+  
+    if (price.min !== '' && price.max !== '') {
+      query = query.where('price', '>=', parseInt(price.min))
+                   .where('price', '<=', parseInt(price.max));
+    }
+  
+    // Execute the query and return the results
+    const snapshot = await query.get();
+  
+    if (snapshot.empty) {
+      console.log("No matching documents.");
+      return [];
+    }
+  
+    // Format the result data
+    const results = snapshot.docs.map(doc => doc.data());
+    return results;
+  };
   
 
 app.listen(8000, () => {
