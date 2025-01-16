@@ -1,13 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <title>Address to Coordinates</title>
 </head>
 <body>
-    <p>hello world</p>
-    <img src='https://ik.imagekit.io/5vwgtwwsdl/example_image_NVfpR4mZj.jpg' alt="Example Image" />
+
+  <form id="addressForm">
+    <label for="city">City:</label>
+    <input type="text" id="city" name="city" required><br><br>
+
+    <label for="state">State:</label>
+    <input type="text" id="state" name="state" required><br><br>
+
+    <label for="pincode">Pincode:</label>
+    <input type="number" id="pincode" name="pincode" min="100000" max="999999" required><br><br>
+
+    <label for="address">Address Details:</label><br>
+    <textarea id="address" name="address" rows="4" cols="50" required></textarea><br><br>
+
+    <button type="submit">Get Coordinates</button>
+  </form>
+
+  <div id="coordinates"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const form = document.getElementById('addressForm');
+    const coordinatesDiv = document.getElementById('coordinates');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const city = document.getElementById('city').value;
+      const state = document.getElementById('state').value;
+      const pincode = document.getElementById('pincode').value;
+      const addressDetails = document.getElementById('address').value;
+
+      // Combine address components
+      
+      const addressdetails = addressDetails.split(",");
+      console.log(addressdetails);
+      const fullAddress = `${city}, ${state} ${pincode}, ${addressdetails}`;
+
+      try {
+        const response = await axios.post('/get-coordinates', { address: fullAddress }); 
+        coordinatesDiv.textContent = `Longitude: ${response.data.longitude}, Latitude: ${response.data.latitude}`;
+      } catch (error) {
+        coordinatesDiv.textContent = `Error: ${error.response.data.error}`;
+      }
+    });
+  </script>
 
 </body>
 </html>
