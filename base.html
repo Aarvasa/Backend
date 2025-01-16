@@ -33,7 +33,7 @@
     <button type="submit">Submit</button>
   </form>
 
-  <div id="coordinates"></div>
+  
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
@@ -90,12 +90,36 @@
 
       const addressdetails = addressDetails.split(",");
       const fullAddress = `${city}, ${state} ${pincode}, ${addressdetails}`;
+      let longitude=null;
+      let latitude = null;
+
 
       try {
         const response = await axios.post('/get-coordinates', { address: fullAddress }); 
-        coordinatesDiv.textContent = `Longitude: ${response.data.longitude}, Latitude: ${response.data.latitude}`;
+
+        
+        longitude=response.data.longitude;
+        latitude=response.data.latitude;
+        const dataToStore = {
+            city,
+            state,
+            pincode,
+            addressDetails,
+            price,
+            size,
+            sqftPrice,
+            latitude,
+            longitude,
+            uploadedMediaUrls
+        };
+
+        // Send data to the backend to store in Firebase
+        const storeResponse = await axios.post('/store_details', dataToStore);
+        console.log('Data stored successfully:', storeResponse.data);
+
+
       } catch (error) {
-        coordinatesDiv.textContent = `Error: ${error.response.data.error}`;
+        console.error('Error:', error.response ? error.response.data.error : error.message);
       }
 
       console.log("Uploaded Media URLs:", uploadedMediaUrls);

@@ -5,6 +5,37 @@ let path = require('path');
 let cors = require('cors');
 const axios = require('axios');
 const cloudinary = require('cloudinary').v2;
+var admin = require("firebase-admin");
+
+var serviceAccount = require("/Users/muditrajsade/Desktop/Backend/aarvasa-property-listing-firebase-adminsdk-xiqqu-0afbc99003.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
+const db = admin.firestore();
+
+// Import the functions you need from the SDKs you need
+const { initializeApp } = require("firebase/app");
+
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyA1a_M68xvwRgZGXhxtpVlWjylJmAkNz-w",
+  authDomain: "aarvasa-property-listing.firebaseapp.com",
+  projectId: "aarvasa-property-listing",
+  storageBucket: "aarvasa-property-listing.firebasestorage.app",
+  messagingSenderId: "585447833026",
+  appId: "1:585447833026:web:dee77232e32fc7acf7aa5b",
+  measurementId: "G-WLPDKTJCBJ"
+};
+
+// Initialize Firebase
+const app_b = initializeApp(firebaseConfig);
+
 
 // Cloudinary configuration function
 function configureCloudinary() {
@@ -85,6 +116,44 @@ app.post('/get-coordinates', async (req, res) => {
       res.status(500).json({ error: 'Failed to fetch coordinates' });
     }
   });
+
+app.post('/store_details',async function(req,res){
+
+        
+        try {
+            const { city, state, pincode, addressDetails, price, size, sqftPrice, latitude, longitude,uploadedMediaUrls } = req.body;
+    
+            // Prepare the data object
+            const data = {
+                city,
+                state,
+                pincode,
+                addressDetails,
+                price,
+                size,
+                sqftPrice,
+                latitude,
+                longitude,
+                uploadedMediaUrls
+                
+            };
+            
+    
+            // Push the data to Firebase (Firestore example)
+            const docRef = await db.collection('propertyDetails').add(data);
+           
+    
+            console.log('Data stored in Firebase with ID:', docRef.id);
+            res.status(200).json({ success: true, id: docRef.id });
+        } catch (error) {
+            console.error('Error storing details in Firebase:', error);
+            res.status(500).json({ error: 'Failed to store details in Firebase' });
+        }
+    
+
+
+
+});
   
 
 app.listen(8000, () => {

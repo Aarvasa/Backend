@@ -23,6 +23,8 @@
     "cloudinary": "^2.5.1",
     "cors": "^2.8.5",
     "express": "^4.21.2",
+    "firebase": "^11.1.0",
+    "firebase-admin": "^13.0.2",
     "imagekit": "^6.0.0",
     "path": "^0.12.7"
   }
