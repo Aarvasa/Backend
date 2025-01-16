@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Address to Coordinates</title>
+  <title>Address to Coordinates with Additional Details</title>
 </head>
 <body>
 
@@ -18,15 +18,72 @@
     <label for="address">Address Details:</label><br>
     <textarea id="address" name="address" rows="4" cols="50" required></textarea><br><br>
 
-    <button type="submit">Get Coordinates</button>
+    <label for="price">Price of Plot:</label>
+    <input type="number" id="price" name="price" required><br><br>
+
+    <label for="size">Size of Plot (in sq ft):</label>
+    <input type="number" id="size" name="size" required><br><br>
+
+    <label for="sqftPrice">Price per sq ft:</label>
+    <input type="text" id="sqftPrice" name="sqftPrice" readonly><br><br>
+
+    <label for="media">Upload Images and Videos:</label><br>
+    <button type="button" id="uploadWidget">Upload Media</button><br><br>
+
+    <button type="submit">Submit</button>
   </form>
 
   <div id="coordinates"></div>
+  <div id="uploadedFiles"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
+
   <script>
     const form = document.getElementById('addressForm');
     const coordinatesDiv = document.getElementById('coordinates');
+    const uploadedFilesDiv = document.getElementById('uploadedFiles');
+    const sqftPriceInput = document.getElementById('sqftPrice');
+
+    // Calculate price per sq ft based on input size and price
+    document.getElementById('size').addEventListener('input', () => {
+      const price = parseFloat(document.getElementById('price').value) || 0;
+      const size = parseFloat(document.getElementById('size').value) || 0;
+      sqftPriceInput.value = size > 0 ? (price / size).toFixed(2) : '';
+    });
+
+    document.getElementById('price').addEventListener('input', () => {
+      const price = parseFloat(document.getElementById('price').value) || 0;
+      const size = parseFloat(document.getElementById('size').value) || 0;
+      sqftPriceInput.value = size > 0 ? (price / size).toFixed(2) : '';
+    });
+
+    // Cloudinary upload widget
+    const uploadWidget = cloudinary.createUploadWidget(
+      {
+        cloudName: "dqhddm7mi",
+        apiKey: "222323681783653",
+        uploadPreset: "unsigned_preset", // Make sure to create this preset in your Cloudinary dashboard
+        folder: "property_media",
+        sources: ["local", "camera"],
+        resourceType: "auto"
+      },
+      (error, result) => {
+        if (!error && result && result.event === "success") {
+          const file = result.info;
+          const mediaElement = document.createElement(file.resource_type === "video" ? "video" : "img");
+          mediaElement.src = file.secure_url;
+          mediaElement.style.maxWidth = "200px";
+          mediaElement.style.margin = "10px";
+          mediaElement.setAttribute("controls", "true"); // Add controls for videos
+          uploadedFilesDiv.appendChild(mediaElement);
+        }
+      }
+    );
+
+    document.getElementById('uploadWidget').addEventListener('click', () => {
+      uploadWidget.open();
+    });
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -35,11 +92,11 @@
       const state = document.getElementById('state').value;
       const pincode = document.getElementById('pincode').value;
       const addressDetails = document.getElementById('address').value;
+      const price = document.getElementById('price').value;
+      const size = document.getElementById('size').value;
+      const sqftPrice = sqftPriceInput.value;
 
-      // Combine address components
-      
       const addressdetails = addressDetails.split(",");
-      console.log(addressdetails);
       const fullAddress = `${city}, ${state} ${pincode}, ${addressdetails}`;
 
       try {
