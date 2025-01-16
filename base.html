@@ -34,7 +34,6 @@
   </form>
 
   <div id="coordinates"></div>
-  <div id="uploadedFiles"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
@@ -42,10 +41,9 @@
   <script>
     const form = document.getElementById('addressForm');
     const coordinatesDiv = document.getElementById('coordinates');
-    const uploadedFilesDiv = document.getElementById('uploadedFiles');
     const sqftPriceInput = document.getElementById('sqftPrice');
+    const uploadedMediaUrls = [];
 
-    // Calculate price per sq ft based on input size and price
     document.getElementById('size').addEventListener('input', () => {
       const price = parseFloat(document.getElementById('price').value) || 0;
       const size = parseFloat(document.getElementById('size').value) || 0;
@@ -58,12 +56,11 @@
       sqftPriceInput.value = size > 0 ? (price / size).toFixed(2) : '';
     });
 
-    // Cloudinary upload widget
     const uploadWidget = cloudinary.createUploadWidget(
       {
         cloudName: "dqhddm7mi",
         apiKey: "222323681783653",
-        uploadPreset: "unsigned_preset", // Make sure to create this preset in your Cloudinary dashboard
+        uploadPreset: "aarvasa",
         folder: "property_media",
         sources: ["local", "camera"],
         resourceType: "auto"
@@ -71,12 +68,7 @@
       (error, result) => {
         if (!error && result && result.event === "success") {
           const file = result.info;
-          const mediaElement = document.createElement(file.resource_type === "video" ? "video" : "img");
-          mediaElement.src = file.secure_url;
-          mediaElement.style.maxWidth = "200px";
-          mediaElement.style.margin = "10px";
-          mediaElement.setAttribute("controls", "true"); // Add controls for videos
-          uploadedFilesDiv.appendChild(mediaElement);
+          uploadedMediaUrls.push(file.secure_url);
         }
       }
     );
@@ -105,6 +97,8 @@
       } catch (error) {
         coordinatesDiv.textContent = `Error: ${error.response.data.error}`;
       }
+
+      console.log("Uploaded Media URLs:", uploadedMediaUrls);
     });
   </script>
 
