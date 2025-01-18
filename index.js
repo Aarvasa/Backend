@@ -7,7 +7,7 @@ const axios = require('axios');
 const cloudinary = require('cloudinary').v2;
 var admin = require("firebase-admin");
 const { Country, State, City } = require("country-state-city");
-var serviceAccount = require("/Users/muditrajsade/Desktop/Backend/aarvasa-property-listing-firebase-adminsdk-xiqqu-0afbc99003.json");
+var serviceAccount = require("aarvasa-property-listing-firebase-adminsdk-xiqqu-0afbc99003.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
