@@ -7,7 +7,20 @@ const axios = require('axios');
 const cloudinary = require('cloudinary').v2;
 var admin = require("firebase-admin");
 const { Country, State, City } = require("country-state-city");
-var serviceAccount = require("aarvasa-property-listing-firebase-adminsdk-xiqqu-0afbc99003.json");
+var serviceAccount = {
+  "type": "service_account",
+  "project_id": "aarvasa-property-listing",
+  "private_key_id": "0afbc990031eeaea4f03b2e3628182f994cf9b69",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEuwIBADANBgkqhkiG9w0BAQEFAASCBKUwggShAgEAAoIBAQCvajGCvh7Qd0rT\nYrTCRxDLesz+zPpCHaoaRTcA5K9hBkOglrJuYp98WLJHEBKZ8F9O38DSoRFEa6ze\nuziVKtT+7DE6N4OV5WXA9Hy+FUjIGQVAwDVLHEBCma395XdNayecD+aPPYrsnfjc\nQdxMpIX3NQoFJ3QLVxjaTp/hYwtB2gebGFTsw/RKZoWZGm8PcJ0p21IHmoUP1uYp\nuPLwY7+ZIwllMwKdPI/8drEIGiXOncmOZLQmmttWNb+hFUZV64RN7VLOIspFn+Ee\nIJ4+GLUchqTVZmHzAzWCu1XLqT25BTN2O0erYXPpyZFZe86XNtayHcbs6Eke4Msg\nuw1gLnqNAgMBAAECgf8WWUbo9FkQInlC5ujacskTQIDqSKTh8QfanoG5IbkHmZ/B\nasSs7B9HDEMv4gwe6R7duIWcOq2vgATaLOxucpXkzxQ813ne0ozUC1XOeWtYKLd2\n5U5RF1QRYd8B3i65EKFLgqkUTPZeG1nHgBc2Mf05mhI/rUuliy+gUWXrCiJFe/DF\nZNuwpn9ZxkVH6ZKdGfDaevIHjqDOdOS20itqe0I1gHy7kX3zdzhwAW6000Pi0bjG\nlsrTZgvZjvlf/Y3mFHKbXaj99XY6t8TOBo1AtGKJU+lvTKwkA0Dg22/SxyV8egK+\n5kkA0AktmipCHwlDyjKmiJwPcHVURzHW4/MHZikCgYEA1roiMvStxCSqvSCZkmDs\nj3Y3e/JUF0UuwR+miejFOn5BQ4OS/S7tcHKxinRkqM23YsBsK+FEwtNa2Wc59yUL\n0jRDER1Pq4tNTegxHkP8TYAe0IeqQEQwe6VLGQJMUeNyTEeoD1hBqJFSJM2Zh6RG\nDsa5bdSIah0osepb2V6reYUCgYEA0SGo0CPoKnIkkcjmRwRfJSIryQRebHw/xEv2\nFUEwe1Goi2mFfr4m+ZstAgkpCk+HELBkVbNoZorEEjiWTX2JGUuFSHjBaF4Y/ph4\n0fJLd7XgJsGkoMjQPaLBCJnM6/jP+gbKlUHNUt25vUpuZ/UbhjKJTUaH9tKYJ/za\n2aibB2kCgYEAoPN8Vv2YkoF5ibI56sLEDvTpufp2lcrBtPjoeE8GJ0Yj3VtufmEC\nkVsnQUTlfrJUV60sZ+e/BtouKu95P4uBRNrvupBh+4+7Lj5xMuJ66Ay1DFHkh6+V\nN9k6ZVCXrHn0XsEHdBkPfi8Ph46lGktESCclLvI0HnYk3tdwaYrQtZECgYBm/oC5\nITXx0Y0ZDyv5xbll/FI8CZ7HJtnwvshO53ANC8ZKAonwRY3EWBvuaLyBi3ElUvnX\nCyhbd/PgVWYQe8bNYlgdvPrjf5Qnrsex/fYU2smtzKhbVwrXkBQpPDWj8UHcDQQw\nRdvs963F/6YoJJqNmM3t9NJ5SHYPG4RctaDEIQKBgHE8pTzAPKyQtsMe/M+F3j3X\nQaSFGFJB538aMeV+gsUKmMFkJfAwLakA2VA9mwfMbRiZiYdDU+ttsx98HOrTy9xM\nsMtmCW5UW70pWcuXbacfh1AT7ZALdYD9g/5O3PwaYrqcsPZYIeDEYtnNYOqLR3xV\nc92QV3iy5G0CJXszt7zD\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-xiqqu@aarvasa-property-listing.iam.gserviceaccount.com",
+  "client_id": "118103228326978316659",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-xiqqu%40aarvasa-property-listing.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
+
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
