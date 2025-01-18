@@ -6,7 +6,7 @@ let cors = require('cors');
 const axios = require('axios');
 const cloudinary = require('cloudinary').v2;
 var admin = require("firebase-admin");
-
+const { Country, State, City } = require("country-state-city");
 var serviceAccount = require("/Users/muditrajsade/Desktop/Backend/aarvasa-property-listing-firebase-adminsdk-xiqqu-0afbc99003.json");
 
 admin.initializeApp({
@@ -204,6 +204,18 @@ app.post('/filter', async function(req, res) {
     const results = snapshot.docs.map(doc => doc.data());
     return results;
   };
+
+  app.get("/api/states", (req, res) => {
+    const states = State.getStatesOfCountry("IN"); // "IN" is the ISO code for India
+    res.json(states);
+  });
+  
+  // Get cities of a state
+  app.get("/api/cities/:stateCode", (req, res) => {
+    const stateCode = req.params.stateCode;
+    const cities = City.getCitiesOfState("IN", stateCode); // Use state code
+    res.json(cities);
+  });
   
 
 app.listen(8000, () => {
