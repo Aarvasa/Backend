@@ -139,6 +139,9 @@ app.post('/get_within_range',async function(req,res){
   try {
     const { address,range } = req.body;
 
+    console.log(address);
+
+
     const apiUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address= ' + encodeURIComponent(address) + '&key=AIzaSyCZQ7QBcNicwveYO_z21CjV_zkhM8nNb7M'; 
     console.log(apiUrl);
     const response = await axios.get(apiUrl);
@@ -149,6 +152,9 @@ app.post('/get_within_range',async function(req,res){
       let a = location.lng;
       let b = location.lat;
 
+      console.log(b);
+      console.log(a);
+
       
       const propertiesSnapshot = await db.collection('propertyDetails').get(); // Adjust the collection name
       const properties = propertiesSnapshot.docs.map(doc => doc.data());
@@ -157,49 +163,45 @@ app.post('/get_within_range',async function(req,res){
       console.log("range  is");
       console.log(range);
     // Compare distances
-      properties.forEach(async property => {
-        const propertyLat = property.latitude; // Replace with the correct field name
-  const propertyLng = property.longitude; // Replace with the correct field name
-  
-  const userLocation = { lat: b, lng: a }; // User's location (lat, lng)
-  const propertyLocation = { lat: propertyLat, lng: propertyLng }; // Property's location (lat, lng)
+    for (const property of properties) {
+      const propertyLat = property.latitude; // Replace with the correct field name
+      const propertyLng = property.longitude; // Replace with the correct field name
 
-  // Prepare the API URL for Distance Matrix API
-  const apiUrl = 'https://maps.googleapis.com/maps/api/distancematrix/json?' +
-      'origins=' + b + ',' + a +  // User location (origins)
-      '&destinations=' + propertyLat + ',' + propertyLng +  // Property location (destinations)
-      '&key=AIzaSyCZQ7QBcNicwveYO_z21CjV_zkhM8nNb7M' +
-      '&units=metric';  // You can use metric units for kilometers or meters
+      const userLocation = { lat: b, lng: a }; // User's location (lat, lng)
+      const propertyLocation = { lat: propertyLat, lng: propertyLng }; // Property's location (lat, lng)
 
-  // Make the API call
-  const distanceResponse = await axios.get(apiUrl);
+      // Prepare the API URL for Distance Matrix API
+      const apiUrl = 'https://maps.googleapis.com/maps/api/distancematrix/json?' +
+          'origins=' + b + ',' + a +  // User location (origins)
+          '&destinations=' + propertyLat + ',' + propertyLng +  // Property location (destinations)
+          '&key=AIzaSyCZQ7QBcNicwveYO_z21CjV_zkhM8nNb7M' +
+          '&units=metric';  // You can use metric units for kilometers or meters
 
-  
-  if (
-    distanceResponse.data.rows &&
-    distanceResponse.data.rows.length > 0 &&
-    distanceResponse.data.rows[0].elements &&
-    distanceResponse.data.rows[0].elements.length > 0
-  ) {
-    const distanceElement = distanceResponse.data.rows[0].elements[0];
-  
-    if (distanceElement.status === "OK") {
-      const distanceInMeters = distanceElement.distance.value; // The distance in meters
-      console.log(`Distance to property: ${distanceInMeters} meters`);
-      console.log(property);
-      if(distanceInMeters<=range){
-        nearbyProperties.push(property);
-        
+      // Make the API call
+      const distanceResponse = await axios.get(apiUrl);
 
+      if (
+        distanceResponse.data.rows &&
+        distanceResponse.data.rows.length > 0 &&
+        distanceResponse.data.rows[0].elements &&
+        distanceResponse.data.rows[0].elements.length > 0
+      ) {
+        const distanceElement = distanceResponse.data.rows[0].elements[0];
+
+        if (distanceElement.status === "OK") {
+          let distanceInMeters = distanceElement.distance.value; // The distance in meters
+          console.log(`Distance to property: ${distanceInMeters} meters`);
+          console.log(property);
+
+          distanceInMeters = parseFloat(distanceElement.distance.value);
+          let ranged = parseFloat(range);
+          if (distanceInMeters <= ranged) {
+            nearbyProperties.push(property);
+          }
+        }
       }
-      
-      // You can convert it to other units, like kilometers if needed
-      
     }
-  }
-
-        
-      });
+      console.log("hiiiiiiii");
 
       console.log(nearbyProperties);
 
