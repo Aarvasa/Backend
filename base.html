@@ -167,6 +167,7 @@
 
         // Send data to the backend to store in Firebase
         const storeResponse = await axios.post('/store_details', dataToStore);
+        uploadedMediaUrls = [];
         console.log('Data stored successfully:', storeResponse.data);
 
 

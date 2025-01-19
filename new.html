@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location Input</title>
+</head>
+<body>
+    <h1>Enter Location Details</h1>
+    <form onsubmit="submitForm(event)">
+        <label for="state">State:</label>
+        <input type="text" id="state" name="state" required><br><br>
+
+        <label for="city">City:</label>
+        <input type="text" id="city" name="city" required><br><br>
+
+        <label for="address">Address:</label>
+        <textarea id="address" name="address" rows="3" required></textarea><br><br>
+
+        <label for="pincode">Pincode:</label>
+        <input type="text" id="pincode" name="pincode" required><br><br>
+
+        <label for="range">Range (in meters):</label>
+        <input type="number" id="range" name="range" required><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+<script>
+    async function submitForm(event) {
+        event.preventDefault(); // Prevent form from refreshing the page
+
+        const state = document.getElementById('state').value;
+        const city = document.getElementById('city').value;
+        const address = document.getElementById('address').value;
+        const pincode = document.getElementById('pincode').value;
+        const range = document.getElementById('range').value;
+        const addressdetails = address.split(",");
+        const fullAddress = `${addressdetails}, ${city}, ${state}, ${pincode}`;
+
+        const requestData = {
+            address: fullAddress,
+            range: parseFloat(range)
+        };
+
+        try {
+            const response = await fetch('/get_within_range', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestData)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                console.log('Nearby Properties:', result.nearbyProperties);
+                alert('Data fetched successfully. Check console for details.');
+            } else {
+                console.error('Error:', result.error);
+                alert('Error fetching data. See console for details.');
+            }
+        } catch (error) {
+            console.error('Request failed:', error);
+            alert('Failed to send request. See console for details.');
+        }
+    }
+</script>
+</html>

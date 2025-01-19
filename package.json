@@ -26,6 +26,7 @@
     "express": "^4.21.2",
     "firebase": "^11.1.0",
     "firebase-admin": "^13.0.2",
+    "haversine-distance": "^1.2.3",
     "imagekit": "^6.0.0",
     "path": "^0.12.7"
   }
