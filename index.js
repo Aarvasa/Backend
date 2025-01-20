@@ -7,7 +7,6 @@ const axios = require('axios');
 const cloudinary = require('cloudinary').v2;
 var admin = require("firebase-admin");
 const { Country, State, City } = require("country-state-city");
-const haversine = require('haversine-distance');
 var serviceAccount = {
   "type": "service_account",
   "project_id": "aarvasa-property-listing",
@@ -28,6 +27,8 @@ admin.initializeApp({
 });
 
 const db = admin.firestore();
+
+
 
 // Import the functions you need from the SDKs you need
 const { initializeApp } = require("firebase/app");
@@ -109,10 +110,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, '/base.html'));
 });
-app.get('/n',function(req,res){
-  res.sendFile(path.join(__dirname, '/new.html'));
-
-})
 
 app.post('/get-coordinates', async (req, res) => {
     try {
@@ -134,89 +131,6 @@ app.post('/get-coordinates', async (req, res) => {
       res.status(500).json({ error: 'Failed to fetch coordinates' });
     }
   });
-
-app.post('/get_within_range',async function(req,res){
-  try {
-    const { address,range } = req.body;
-
-    console.log(address);
-
-
-    const apiUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address= ' + encodeURIComponent(address) + '&key=AIzaSyCZQ7QBcNicwveYO_z21CjV_zkhM8nNb7M'; 
-    console.log(apiUrl);
-    const response = await axios.get(apiUrl);
-    const data = response.data;
-
-    if (data.results && data.results.length > 0) {
-      const location = data.results[0].geometry.location;
-      let a = location.lng;
-      let b = location.lat;
-
-      console.log(b);
-      console.log(a);
-
-      
-      const propertiesSnapshot = await db.collection('propertyDetails').get(); // Adjust the collection name
-      const properties = propertiesSnapshot.docs.map(doc => doc.data());
-      console.log(properties);
-      const nearbyProperties = [];
-      console.log("range  is");
-      console.log(range);
-    // Compare distances
-    for (const property of properties) {
-      const propertyLat = property.latitude; // Replace with the correct field name
-      const propertyLng = property.longitude; // Replace with the correct field name
-
-      const userLocation = { lat: b, lng: a }; // User's location (lat, lng)
-      const propertyLocation = { lat: propertyLat, lng: propertyLng }; // Property's location (lat, lng)
-
-      // Prepare the API URL for Distance Matrix API
-      const apiUrl = 'https://maps.googleapis.com/maps/api/distancematrix/json?' +
-          'origins=' + b + ',' + a +  // User location (origins)
-          '&destinations=' + propertyLat + ',' + propertyLng +  // Property location (destinations)
-          '&key=AIzaSyCZQ7QBcNicwveYO_z21CjV_zkhM8nNb7M' +
-          '&units=metric';  // You can use metric units for kilometers or meters
-
-      // Make the API call
-      const distanceResponse = await axios.get(apiUrl);
-
-      if (
-        distanceResponse.data.rows &&
-        distanceResponse.data.rows.length > 0 &&
-        distanceResponse.data.rows[0].elements &&
-        distanceResponse.data.rows[0].elements.length > 0
-      ) {
-        const distanceElement = distanceResponse.data.rows[0].elements[0];
-
-        if (distanceElement.status === "OK") {
-          let distanceInMeters = distanceElement.distance.value; // The distance in meters
-          console.log(`Distance to property: ${distanceInMeters} meters`);
-          console.log(property);
-
-          distanceInMeters = parseFloat(distanceElement.distance.value);
-          let ranged = parseFloat(range);
-          if (distanceInMeters <= ranged) {
-            nearbyProperties.push(property);
-          }
-        }
-      }
-    }
-      console.log("hiiiiiiii");
-
-      console.log(nearbyProperties);
-
-
-      res.json({ nearbyProperties });
-      console.log("hello");
-    } else {
-      res.status(404).json({ error: 'Address not found' });
-    }
-  } catch (error) {
-    console.error('Error fetching coordinates:', error);
-    res.status(500).json({ error: 'Failed to fetch coordinates' });
-  }
-
-});
 
 app.post('/store_details',async function(req,res){
 
@@ -271,32 +185,39 @@ app.post('/filter', async function(req, res) {
   
   // Function to get filtered data from Firestore
   const getFilteredData = async (filters) => {
-    const { state, city, pincode, min , max } = filters;
-    console.log("hello");
-    console.log(state);
+    const { state, city, pincode, price } = filters;
   
-    const propertiesSnapshot = await db.collection('propertyDetails').get(); // Adjust the collection name
-    const properties = propertiesSnapshot.docs.map(doc => doc.data());
-    let prop = [];
-    for(g in properties){
-      
-      if(properties[g].state == state && properties[g].city == city && properties[g].pincode == pincode){
-        let prc = parseInt(properties[g].price);
-        let mind = parseInt(min);
-        let maxd = parseInt(max);
-
-        if(prc>=mind && prc <= maxd ){
-          prop.push(properties[g]);
-
-        }
-      }
+    let query = db.collection('properties'); // Replace 'properties' with your collection name
+  
+    // Apply filters based on provided values
+    if (state && state !== 'all') {
+      query = query.where('state', '==', state);
     }
-
-    return prop;
-
-
-
-
+  
+    if (city && city !== 'all') {
+      query = query.where('city', '==', city);
+    }
+  
+    if (pincode && pincode !== '') {
+      query = query.where('pincode', '==', pincode);
+    }
+  
+    if (price.min !== '' && price.max !== '') {
+      query = query.where('price', '>=', parseInt(price.min))
+                   .where('price', '<=', parseInt(price.max));
+    }
+  
+    // Execute the query and return the results
+    const snapshot = await query.get();
+  
+    if (snapshot.empty) {
+      console.log("No matching documents.");
+      return [];
+    }
+  
+    // Format the result data
+    const results = snapshot.docs.map(doc => doc.data());
+    return results;
   };
 
   app.get("/api/states", (req, res) => {
@@ -310,6 +231,55 @@ app.post('/filter', async function(req, res) {
     const cities = City.getCitiesOfState("IN", stateCode); // Use state code
     res.json(cities);
   });
+
+app.post('/signup', async (req, res) => {
+    const {
+        email,
+        password,
+        fullName,
+        contactNumber,
+        countryCode,
+        age,
+        area,
+        pincode,
+        state,
+        district,
+        roadNo,
+        panCard,
+    } = req.body;
+
+    const data = {
+      email,
+        password,
+        fullName,
+        contactNumber,
+        countryCode,
+        age,
+        area,
+        pincode,
+        state,
+        district,
+        roadNo,
+        panCard,
+      
+      };
+
+    // Validate required fields
+    
+
+    try {
+      console.log(data);
+        // Create user in Firebase Authentication
+        const docRef = await db.collection('login_details').add(data);
+           
+    
+        console.log('Data stored in Firebase with ID:', docRef.id);
+        res.status(200).json({ success: true, id: docRef.id });
+       
+    } catch (error) {
+        res.status(500).json({ message: 'Error creating user', error: error.message });
+    }
+});
   
 
 app.listen(8000, () => {
