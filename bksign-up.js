@@ -8,15 +8,15 @@ const PORT = 3000;
 app.use(express.json());
 
 // Initialize Firebase Admin SDK
-const serviceAccount = require('./aarvasa-auth-firebase-adminsdk-s0hoq-4d1f371928.json');
+const serviceAccount_signup = require('./aarvasa-auth-firebase-adminsdk-s0hoq-4d1f371928.json');
 
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
+    credential: admin.credential.cert(serviceAccount_signup),
     databaseURL: "https://aarvasa-auth-default-rtdb.firebaseio.com/" // Replace with your database URL
 });
 
 const auth = admin.auth();
-const db = admin.database();
+const db_sign_Up = admin.database();
 
 // Signup API
 

@@ -28,6 +28,8 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
+
+
 // Import the functions you need from the SDKs you need
 const { initializeApp } = require("firebase/app");
 
@@ -229,6 +231,55 @@ app.post('/filter', async function(req, res) {
     const cities = City.getCitiesOfState("IN", stateCode); // Use state code
     res.json(cities);
   });
+
+app.post('/signup', async (req, res) => {
+    const {
+        email,
+        password,
+        fullName,
+        contactNumber,
+        countryCode,
+        age,
+        area,
+        pincode,
+        state,
+        district,
+        roadNo,
+        panCard,
+    } = req.body;
+
+    const data = {
+      email,
+        password,
+        fullName,
+        contactNumber,
+        countryCode,
+        age,
+        area,
+        pincode,
+        state,
+        district,
+        roadNo,
+        panCard,
+      
+      };
+
+    // Validate required fields
+    
+
+    try {
+      console.log(data);
+        // Create user in Firebase Authentication
+        const docRef = await db.collection('login_details').add(data);
+           
+    
+        console.log('Data stored in Firebase with ID:', docRef.id);
+        res.status(200).json({ success: true, id: docRef.id });
+       
+    } catch (error) {
+        res.status(500).json({ message: 'Error creating user', error: error.message });
+    }
+});
   
 
 app.listen(8000, () => {

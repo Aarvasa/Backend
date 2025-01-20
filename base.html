@@ -139,12 +139,13 @@
       const price = document.getElementById('price').value;
       const size = document.getElementById('size').value;
       const sqftPrice = sqftPriceInput.value;
+      
 
       const addressdetails = addressDetails.split(",");
-      const fullAddress = `${city}, ${state} ${pincode}, ${addressdetails}`;
+      const fullAddress = `${city}, ${states} ${pincode}, ${addressdetails}`;
       let longitude=null;
       let latitude = null;
-
+      
 
       try {
         const response = await axios.post('/get-coordinates', { address: fullAddress }); 
