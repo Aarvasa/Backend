@@ -1,3 +1,4 @@
+require('dotenv').config();
 let express = require('express');
 let app = express();
 let bodyParser = require('body-parser');
@@ -7,11 +8,12 @@ const axios = require('axios');
 const cloudinary = require('cloudinary').v2;
 var admin = require("firebase-admin");
 const { Country, State, City } = require("country-state-city");
-var serviceAccount = {
+
+let service_account = {
   "type": "service_account",
   "project_id": "aarvasa-property-listing",
   "private_key_id": "f798b9566219cda704f7ed6f6f0b23f529382270",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDGYz2agwkxKfo4\n1yZQzPwDQmdgoz39IKxe29wAliZ89FLV6aFOH3mqhOJm3wZBwCS9EwjXBgMhhuI7\ntCAkuS+FBCyGBsyJS2UqL08kql+/9e1cnSCCnAZ0BvZx9RcNUEldM1NAO6cN4TAb\nasj+aorw9R2ozyUZjIoYACjxg3fZqfkg30vk5a4F0TEIpF2tPmRxVKzYmmM6a8Br\nal5kyGcwBYwMOEpiO0qZb7U/nGrMAHXamGN+Qc2Fv4a4nqr4Qg/9eiu4XtwPGj39\n86xwpWEds72r+0so1xyTNQ7ERC6baAo2SztKGvrdGzMQjtryzV4LtqDJjCH6rI0R\n9KNgdae1AgMBAAECggEACC5W/8HCwFzatVCFWLnUnv4fHRCA8ajmMCTmZ2gfDweU\nnpQmGKk6dJz1aNMZIwnSqgZjLATS3mV9e634+7K0TOAIGwB5m6QjjZq1AON9aSvc\nfYrQPfqZAdy4pH3m1Qp4IAhfY5Z3ft5yrqrCaPVz+dhN1bncbeI1CU+BC2abFmYg\njd2YdovLqPhYws9ZSBtlYpHJ/8CMGHMmeM96AG5bY3LcDVHPTUPpaF7tnG5z/64e\nbfwEwO6/3jwKF2tU7SsSy664aUuSOD2+VfColcdDNx28wkNxpkpLgiFTbNnck3ku\nfG9qTdoyPTP83E1GA47rH7aPEWhVnT2eSKMuHib5eQKBgQD7W/+J9ebHDedTvlH7\npEoHPqIs5BshuMO9ekw1AaDCN/9G/oHYgHrlexJ6qvR40Nb/nkdM73Wsx+dWmSxq\nG3h20cslraiDl+4EDp8bbWL7n7tUe5EaU5iyWNRhY9cJH6GKjcAxiU5v7MyNTBzi\nydj7srSfEahUo8xCEu6I/ggdiQKBgQDKDOG/SJ6ooWn3AkYPZG7yH54Wkgz0OkQn\n62pik/F8trRXVYrgQo4ipJB9+3sfpjLykzMT1MpUy0XCyJFcd3bWJBCUo8W+prZF\niXiHFqUXfYRaohKQNr5yJQRrJc/xWHdaQUN9o3tY+SyMduCHqtHrPD/n8NQNWZnj\nCzMGiC65zQKBgQCJ9G8mx9hWTZI1yxHx27Rpj32wx60AcAi2OKYUvYT+s38e9tZK\n/hD1W/vDaYptuKkXeEZHunFKWBjm1YCj59nQ1Mn7Lvl65+rRPTkj84BM+9jzwDHe\nUh1PXSOLJCHENyERC0V9qo9rLHsD3c9IxWGamvU5DJbnhVK4vO1AMLRBiQKBgQCb\nAo0Cuoz2ZHeuSHFFh9DSMs2PFVeY20bEtYh1vnirLGRpCDi2Wnk/PK+Z56CLJG+7\nyJCMK1la+mQ3zrYukXx7R0ntL0QbQz1dVd1BDm9z+Rjci7DgMQ+k9J9SML06tJtE\nhANqVUzhcrDpxp31l2jbJusEX6/f2hkEpefsn/fxFQKBgF+FkWcmx0qcBfTz11ai\nYKJAM1N4RFd32by/gFswe60YKv72GixqAW9CUGRGJgfRfSDrYU0ZEKTAVkdg6Kqu\n4TgheJqJDSucMX1cGY9vMuy8AlxGdxyRjm3o7DaKTfNdZZNo0mmWsM2WJHZifN/x\nOymnypH9WUbSCwssAG5GOH7X\n-----END PRIVATE KEY-----\n",
+  "private_key": process.env.FIREBASE_SERVICE_ACCOUNT,
   "client_email": "firebase-adminsdk-xiqqu@aarvasa-property-listing.iam.gserviceaccount.com",
   "client_id": "118103228326978316659",
   "auth_uri": "https://accounts.google.com/o/oauth2/auth",
@@ -21,11 +23,12 @@ var serviceAccount = {
   "universe_domain": "googleapis.com"
 }
 
+console.log("jj");
 
-
+console.log(service_account);
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert(service_account)
 });
 
 const db = admin.firestore();
@@ -117,7 +120,7 @@ app.post('/get-coordinates', async (req, res) => {
     try {
       const { address } = req.body;
   
-      const apiUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address= ' + encodeURIComponent(address) + '&key=AIzaSyCZQ7QBcNicwveYO_z21CjV_zkhM8nNb7M'; 
+      const apiUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address= ' + encodeURIComponent(address) + '&key=' + process.env.GOOGLE_MAPS_API_KEY; 
       console.log(apiUrl);
       const response = await axios.get(apiUrl);
       const data = response.data;
@@ -212,7 +215,7 @@ app.post('/filter', async function(req, res) {
     try {
       const { address,range } = req.body;
       console.log(address);
-      const apiUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address= ' + encodeURIComponent(address) + '&key=AIzaSyCZQ7QBcNicwveYO_z21CjV_zkhM8nNb7M'; 
+      const apiUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address= ' + encodeURIComponent(address) + '&key=' + process.env.GOOGLE_MAPS_API_KEY; 
       console.log(apiUrl);
       const response = await axios.get(apiUrl);
       const data = response.data;
@@ -239,7 +242,7 @@ app.post('/filter', async function(req, res) {
         const apiUrl = 'https://maps.googleapis.com/maps/api/distancematrix/json?' +
             'origins=' + b + ',' + a +  // User location (origins)
             '&destinations=' + propertyLat + ',' + propertyLng +  // Property location (destinations)
-            '&key=AIzaSyCZQ7QBcNicwveYO_z21CjV_zkhM8nNb7M' +
+            '&key=' + process.env.GOOGLE_MAPS_API_KEY +
             '&units=metric';  // You can use metric units for kilometers or meters
         // Make the API call
         const distanceResponse = await axios.get(apiUrl);
