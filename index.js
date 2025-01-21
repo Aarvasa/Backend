@@ -12,7 +12,7 @@ const { Country, State, City } = require("country-state-city");
 let service_account = {
   "type": "service_account",
   "project_id": "aarvasa-property-listing",
-  "private_key_id": "f798b9566219cda704f7ed6f6f0b23f529382270",
+  "private_key_id": "60043211655064be676a5147ed13a7cc6d502ecc",
   "private_key": process.env.FIREBASE_SERVICE_ACCOUNT,
   "client_email": "firebase-adminsdk-xiqqu@aarvasa-property-listing.iam.gserviceaccount.com",
   "client_id": "118103228326978316659",
