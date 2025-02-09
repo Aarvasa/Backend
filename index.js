@@ -338,6 +338,49 @@ app.post('/signup', async (req, res) => {
         res.status(500).json({ message: 'Error creating user', error: error.message });
     }
 });
+
+app.post('/post_rental_properties',async function(req,res){
+    
+
+    try {
+      console.log(req.body);
+
+      let ghyu = req.body.Url;
+      const match = ghyu.match(/@([-.\d]+),([-.\d]+)/);
+      if(match){
+        req.body.lat = parseFloat(match[1]);
+        req.body.long = parseFloat(match[2]);
+        const docRef = await db.collection('RENT_PROPERTIES').add(req.body);
+           
+    
+        console.log('Data stored in Firebase with ID:', docRef.id);
+
+
+
+        res.json({message:"successful"});
+      }
+      else {
+        res.status(404).json({ error: 'Address not found' });
+      }
+
+  
+      
+    } catch (error) {
+      console.error('Error fetching coordinates:', error);
+      res.status(500).json({ error: 'Failed to fetch coordinates' });
+    }
+
+
+
+
+
+
+
+
+
+
+
+});
   
 
 app.listen(8000, () => {
