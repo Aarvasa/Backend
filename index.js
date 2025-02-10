@@ -346,7 +346,133 @@ app.post('/post_rental_properties',async function(req,res){
       console.log(req.body);
 
       let ghyu = req.body.Url;
-      const match = ghyu.match(/@([-.\d]+),([-.\d]+)/);
+      console.log(ghyu);
+      const regex = /\/place\/([^\/]+)/; // Extracts the part after /place/
+      const match = ghyu.match(regex);
+
+      if (!match) {
+          return "Invalid URL: No '/place/' found.";
+      }
+
+      const placePart = decodeURIComponent(match[1]); // Decode URL encoding
+
+    // Check if it starts with a number (coordinate format)
+      if (/^\d/.test(placePart)) {
+        const match = ghyu.match(/\/place\/([^/@]+)/);
+        if (match) {
+            let v = [];
+            let dmsCoordinates = decodeURIComponent(match[1]);
+            let ansdf = dmsCoordinates.split("+");
+            let latDMS = ansdf[0]; // "12°58'39.2\"N"
+            let lngDMS = ansdf[1]; // "79°09'47.4\"E"
+
+// Encode each part separately
+            let regex = /(\d+)°(\d+)'([\d.]+)"([NSEW])/;
+            let match_lat = latDMS.match(regex);
+
+            if (!match_lat) {
+                throw new Error("Invalid DMS format");
+            }
+
+            let degrees = parseFloat(match_lat[1]);
+            let minutes = parseFloat(match_lat[2]);
+            let seconds = parseFloat(match_lat[3]);
+            let direction = match_lat[4];
+
+// Convert to decimal degrees
+            let decimal = degrees + (minutes / 60) + (seconds / 3600);
+
+// Apply sign based on direction
+            if (direction === "S" || direction === "W") {
+                decimal = -decimal;
+            }
+            v.push(decimal);
+            let match_long = lngDMS.match(regex);
+
+            if (!match_long) {
+                throw new Error("Invalid DMS format");
+            }
+
+            let degrees_one = parseFloat(match_long[1]);
+            let minutes_one = parseFloat(match_long[2]);
+            let seconds_one = parseFloat(match_long[3]);
+            let direction_one = match_long[4];
+
+// Convert to decimal degrees
+            let decimal_long = degrees_one + (minutes_one / 60) + (seconds_one / 3600);
+
+// Apply sign based on direction
+            if (direction_one === "S" || direction === "W") {
+                decimal_long = -decimal_long;
+            }
+            v.push(decimal_long);
+
+            console.log(v);
+            req.body.lat = v[0];
+            req.body.long = v[1];
+            req.body.zero=0;
+            req.body.zero_point_five = 0;
+            req.body.one = 0;
+            req.body.one_point_five = 0;
+            req.body.two=0;
+            req.body.two_point_five = 0;
+            req.body.three=0;
+            req.body.three_point_five=0;
+            req.body.four=0;
+            req.body.four_point_five = 0;
+            req.body.five = 0;
+            const docRef = await db.collection('RENT_PROPERTIES').add(req.body);
+            console.log('Data stored in Firebase with ID:', docRef.id);
+
+
+
+            res.json({message:"successful"});
+
+
+
+
+
+            
+
+        }
+      } else {
+          
+  
+          const apiUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address= ' + encodeURIComponent(req.body.Url) + '&key=' + process.env.GOOGLE_MAPS_API_KEY; 
+          console.log(apiUrl);
+          const response = await axios.get(apiUrl);
+          const data = response.data;
+  
+          if (data.results && data.results.length > 0) {
+              const location = data.results[0].geometry.location;
+              req.body.lat = location.lat;
+              req.body.long = location.lng;
+              req.body.zero=0;
+              req.body.zero_point_five = 0;
+              req.body.one = 0;
+              req.body.one_point_five = 0;
+              req.body.two=0;
+              req.body.two_point_five = 0;
+              req.body.three=0;
+              req.body.three_point_five=0;
+              req.body.four=0;
+              req.body.four_point_five = 0;
+              req.body.five = 0;
+              const docRef = await db.collection('RENT_PROPERTIES').add(req.body);
+              console.log('Data stored in Firebase with ID:', docRef.id);
+
+
+
+              res.json({message:"successful"});
+          } else {
+              res.status(404).json({ error: 'Address not found' });
+          }
+
+
+          console.log("The URL contains a place name.");
+      }
+
+      /*const match = ghyu.match(/@([-.\d]+),([-.\d]+)/);
       if(match){
         req.body.lat = parseFloat(match[1]);
         req.body.long = parseFloat(match[2]);
@@ -361,7 +487,7 @@ app.post('/post_rental_properties',async function(req,res){
       }
       else {
         res.status(404).json({ error: 'Address not found' });
-      }
+      }*/
 
   
       
