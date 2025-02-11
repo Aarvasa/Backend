@@ -363,8 +363,8 @@ app.post('/post_rental_properties',async function(req,res){
             let v = [];
             let dmsCoordinates = decodeURIComponent(match[1]);
             let ansdf = dmsCoordinates.split("+");
-            let latDMS = ansdf[0]; // "12°58'39.2\"N"
-            let lngDMS = ansdf[1]; // "79°09'47.4\"E"
+            let latDMS = ansdf[0]; 
+            let lngDMS = ansdf[1]; 
 
 // Encode each part separately
             let regex = /(\d+)°(\d+)'([\d.]+)"([NSEW])/;
