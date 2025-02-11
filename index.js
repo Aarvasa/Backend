@@ -555,63 +555,183 @@ app.post('/filter_map_rent_properties',async function(req,res){
   try {
     const { address,range } = req.body;
     console.log(address);
-    const apiUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address= ' + encodeURIComponent(address) + '&key=' + process.env.GOOGLE_MAPS_API_KEY; 
-    console.log(apiUrl);
-    const response = await axios.get(apiUrl);
-    const data = response.data;
-    if (data.results && data.results.length > 0) {
-      const location = data.results[0].geometry.location;
-      let a = location.lng;
-      let b = location.lat;
-      console.log(b);
-      console.log(a);
-      
-      const propertiesSnapshot = await db.collection('RENT_PROPERTIES').get(); // Adjust the collection name
-      const properties = propertiesSnapshot.docs.map(doc => doc.data());
-      console.log(properties);
-      const nearbyProperties = [];
-      console.log("range  is");
-      console.log(range);
-    // Compare distances
-    for (const property of properties) {
-      const propertyLat = property.lat; // Replace with the correct field name
-      const propertyLng = property.long; // Replace with the correct field name
-      const userLocation = { lat: b, lng: a }; // User's location (lat, lng)
-      const propertyLocation = { lat: propertyLat, lng: propertyLng }; // Property's location (lat, lng)
-      // Prepare the API URL for Distance Matrix API
-      const apiUrl = 'https://maps.googleapis.com/maps/api/distancematrix/json?' +
-          'origins=' + b + ',' + a +  // User location (origins)
-          '&destinations=' + propertyLat + ',' + propertyLng +  // Property location (destinations)
-          '&key=' + process.env.GOOGLE_MAPS_API_KEY +
-          '&units=metric';  // You can use metric units for kilometers or meters
-      // Make the API call
-      const distanceResponse = await axios.get(apiUrl);
-      if (
-        distanceResponse.data.rows &&
-        distanceResponse.data.rows.length > 0 &&
-        distanceResponse.data.rows[0].elements &&
-        distanceResponse.data.rows[0].elements.length > 0
-      ) {
-        const distanceElement = distanceResponse.data.rows[0].elements[0];
-        if (distanceElement.status === "OK") {
-          let distanceInMeters = distanceElement.distance.value; // The distance in meters
-          console.log(`Distance to property: ${distanceInMeters} meters`);
-          console.log(property);
-          distanceInMeters = parseFloat(distanceElement.distance.value);
-          let ranged = parseFloat(range);
-          if (distanceInMeters <= ranged) {
-            nearbyProperties.push(property);
-          }
-        }
+    
+    const regex = /\/place\/([^\/]+)/; // Extracts the part after /place/
+    const match = address.match(regex);
+
+      if (!match) {
+          return res.json({'message':"unsuccessful"});
       }
-    }
-      console.log("hiiiiiiii");
-      console.log(nearbyProperties);
-      res.json({ 'nearbyprop':nearbyProperties });
-      console.log("hello");
-    } else {
-      res.status(404).json({ error: 'Address not found' });
-    }
+
+
+
+
+      const placePart = decodeURIComponent(match[1]);
+
+      if (/^\d/.test(placePart)) {
+        const match = address.match(/\/place\/([^/@]+)/);
+        if (match) {
+            let v = [];
+            let dmsCoordinates = decodeURIComponent(match[1]);
+            let ansdf = dmsCoordinates.split("+");
+            let latDMS = ansdf[0]; 
+            let lngDMS = ansdf[1]; 
+
+// Encode each part separately
+            let regex = /(\d+)°(\d+)'([\d.]+)"([NSEW])/;
+            let match_lat = latDMS.match(regex);
+
+            if (!match_lat) {
+                throw new Error("Invalid DMS format");
+            }
+
+            let degrees = parseFloat(match_lat[1]);
+            let minutes = parseFloat(match_lat[2]);
+            let seconds = parseFloat(match_lat[3]);
+            let direction = match_lat[4];
+
+// Convert to decimal degrees
+            let decimal = degrees + (minutes / 60) + (seconds / 3600);
+
+// Apply sign based on direction
+            if (direction === "S" || direction === "W") {
+                decimal = -decimal;
+            }
+            v.push(decimal);
+            let match_long = lngDMS.match(regex);
+
+            if (!match_long) {
+                throw new Error("Invalid DMS format");
+            }
+
+            let degrees_one = parseFloat(match_long[1]);
+            let minutes_one = parseFloat(match_long[2]);
+            let seconds_one = parseFloat(match_long[3]);
+            let direction_one = match_long[4];
+
+// Convert to decimal degrees
+            let decimal_long = degrees_one + (minutes_one / 60) + (seconds_one / 3600);
+
+// Apply sign based on direction
+            if (direction_one === "S" || direction === "W") {
+                decimal_long = -decimal_long;
+            }
+            v.push(decimal_long);
+            const propertiesSnapshot = await db.collection('RENT_PROPERTIES').get(); // Adjust the collection name
+            const properties = propertiesSnapshot.docs.map(doc => doc.data());
+            console.log(properties);
+            const nearbyProperties = [];
+            console.log("range  is");
+            console.log(range);
+    // Compare distances
+            for (const property of properties) {
+                  const propertyLat = property.lat; // Replace with the correct field name
+                  const propertyLng = property.long; // Replace with the correct field name
+                  
+                  // Property's location (lat, lng)
+      // Prepare the API URL for Distance Matrix API
+                  const apiUrl = 'https://maps.googleapis.com/maps/api/distancematrix/json?' +
+                            'origins=' + v[0] + ',' + v[1] +  // User location (origins)
+                            '&destinations=' + propertyLat + ',' + propertyLng +  // Property location (destinations)
+                            '&key=' + process.env.GOOGLE_MAPS_API_KEY +
+                            '&units=metric';  // You can use metric units for kilometers or meters
+      // Make the API call
+                  const distanceResponse = await axios.get(apiUrl);
+                  if (
+                      distanceResponse.data.rows &&
+                      distanceResponse.data.rows.length > 0 &&
+                      distanceResponse.data.rows[0].elements &&
+                      distanceResponse.data.rows[0].elements.length > 0
+                    ) {
+                          const distanceElement = distanceResponse.data.rows[0].elements[0];
+                          if (distanceElement.status === "OK") {
+                                  let distanceInMeters = distanceElement.distance.value; // The distance in meters
+                                  console.log(`Distance to property: ${distanceInMeters} meters`);
+                                  console.log(property);
+                                  distanceInMeters = parseFloat(distanceElement.distance.value);
+                                  let ranged = parseFloat(range);
+                                  if (distanceInMeters <= ranged) {
+                                      nearbyProperties.push(property);
+                                  }
+                            }
+                    }
+                }
+
+                console.log(nearbyProperties);
+                res.json({ 'nearbyprop':nearbyProperties });
+
+
+
+        }
+      } else {
+          
+  
+          const apiUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address= ' + encodeURIComponent(req.body.address) + '&key=' + process.env.GOOGLE_MAPS_API_KEY; 
+          console.log(apiUrl);
+          const response = await axios.get(apiUrl);
+          const data = response.data;
+
+          if (data.results && data.results.length > 0) {
+            const location = data.results[0].geometry.location;
+            let a = location.lng;
+            let b = location.lat;
+            console.log(b);
+            console.log(a);
+            
+            const propertiesSnapshot = await db.collection('RENT_PROPERTIES').get(); // Adjust the collection name
+            const properties = propertiesSnapshot.docs.map(doc => doc.data());
+            console.log(properties);
+            const nearbyProperties = [];
+            console.log("range  is");
+            console.log(range);
+          // Compare distances
+          for (const property of properties) {
+            const propertyLat = property.lat; // Replace with the correct field name
+            const propertyLng = property.long; // Replace with the correct field name
+            const userLocation = { lat: b, lng: a }; // User's location (lat, lng)
+            const propertyLocation = { lat: propertyLat, lng: propertyLng }; // Property's location (lat, lng)
+            // Prepare the API URL for Distance Matrix API
+            const apiUrl = 'https://maps.googleapis.com/maps/api/distancematrix/json?' +
+                'origins=' + b + ',' + a +  // User location (origins)
+                '&destinations=' + propertyLat + ',' + propertyLng +  // Property location (destinations)
+                '&key=' + process.env.GOOGLE_MAPS_API_KEY +
+                '&units=metric';  // You can use metric units for kilometers or meters
+            // Make the API call
+            const distanceResponse = await axios.get(apiUrl);
+            if (
+              distanceResponse.data.rows &&
+              distanceResponse.data.rows.length > 0 &&
+              distanceResponse.data.rows[0].elements &&
+              distanceResponse.data.rows[0].elements.length > 0
+            ) {
+              const distanceElement = distanceResponse.data.rows[0].elements[0];
+              if (distanceElement.status === "OK") {
+                let distanceInMeters = distanceElement.distance.value; // The distance in meters
+                console.log(`Distance to property: ${distanceInMeters} meters`);
+                console.log(property);
+                distanceInMeters = parseFloat(distanceElement.distance.value);
+                let ranged = parseFloat(range);
+                if (distanceInMeters <= ranged) {
+                  nearbyProperties.push(property);
+                }
+              }
+            }
+          }
+            console.log("hiiiiiiii");
+            console.log(nearbyProperties);
+            res.json({ 'nearbyprop':nearbyProperties });
+            console.log("hello");
+          } else {
+            res.status(404).json({ error: 'Address not found' });
+          }
+  
+          
+
+
+          
+      }
+    
+    
   } catch (error) {
     console.error('Error fetching coordinates:', error);
     res.status(500).json({ error: 'Failed to fetch coordinates' });
