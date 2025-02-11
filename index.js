@@ -509,6 +509,116 @@ app.post('/post_rental_properties',async function(req,res){
 });
   
 
+app.post('/all_rent_properties',async function(req,res){
+
+  const propertiesSnapshot = await db.collection('RENT_PROPERTIES').get(); // Adjust the collection name
+  const properties = propertiesSnapshot.docs.map(doc => doc.data());
+
+  console.log(properties);
+
+  res.json({'properties':properties});
+
+   
+
+});
+
+app.post('/filter_rent_properties',async function(req,res){
+  const { state, city, pincode, min , max } = req.body;
+    console.log("hello");
+    console.log(state);
+
+    const propertiesSnapshot = await db.collection('RENT_PROPERTIES').get(); // Adjust the collection name
+    const properties = propertiesSnapshot.docs.map(doc => doc.data());
+    let prop = [];
+    for(g in properties){
+      
+      if(properties[g].state == state && properties[g].city == city && properties[g].pincode == pincode){
+        
+        let prc = parseInt(properties[g].totalAmount);
+        let mind = parseInt(min);
+        let maxd = parseInt(max);
+
+        if(prc>=mind && prc <= maxd ){
+          console.log("he");
+          prop.push(properties[g]);
+        }
+      }
+    }
+
+    res.json({'prop': prop});
+
+
+
+});
+
+app.post('/filter_map_rent_properties',async function(req,res){
+  try {
+    const { address,range } = req.body;
+    console.log(address);
+    const apiUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address= ' + encodeURIComponent(address) + '&key=' + process.env.GOOGLE_MAPS_API_KEY; 
+    console.log(apiUrl);
+    const response = await axios.get(apiUrl);
+    const data = response.data;
+    if (data.results && data.results.length > 0) {
+      const location = data.results[0].geometry.location;
+      let a = location.lng;
+      let b = location.lat;
+      console.log(b);
+      console.log(a);
+      
+      const propertiesSnapshot = await db.collection('RENT_PROPERTIES').get(); // Adjust the collection name
+      const properties = propertiesSnapshot.docs.map(doc => doc.data());
+      console.log(properties);
+      const nearbyProperties = [];
+      console.log("range  is");
+      console.log(range);
+    // Compare distances
+    for (const property of properties) {
+      const propertyLat = property.lat; // Replace with the correct field name
+      const propertyLng = property.long; // Replace with the correct field name
+      const userLocation = { lat: b, lng: a }; // User's location (lat, lng)
+      const propertyLocation = { lat: propertyLat, lng: propertyLng }; // Property's location (lat, lng)
+      // Prepare the API URL for Distance Matrix API
+      const apiUrl = 'https://maps.googleapis.com/maps/api/distancematrix/json?' +
+          'origins=' + b + ',' + a +  // User location (origins)
+          '&destinations=' + propertyLat + ',' + propertyLng +  // Property location (destinations)
+          '&key=' + process.env.GOOGLE_MAPS_API_KEY +
+          '&units=metric';  // You can use metric units for kilometers or meters
+      // Make the API call
+      const distanceResponse = await axios.get(apiUrl);
+      if (
+        distanceResponse.data.rows &&
+        distanceResponse.data.rows.length > 0 &&
+        distanceResponse.data.rows[0].elements &&
+        distanceResponse.data.rows[0].elements.length > 0
+      ) {
+        const distanceElement = distanceResponse.data.rows[0].elements[0];
+        if (distanceElement.status === "OK") {
+          let distanceInMeters = distanceElement.distance.value; // The distance in meters
+          console.log(`Distance to property: ${distanceInMeters} meters`);
+          console.log(property);
+          distanceInMeters = parseFloat(distanceElement.distance.value);
+          let ranged = parseFloat(range);
+          if (distanceInMeters <= ranged) {
+            nearbyProperties.push(property);
+          }
+        }
+      }
+    }
+      console.log("hiiiiiiii");
+      console.log(nearbyProperties);
+      res.json({ 'nearbyprop':nearbyProperties });
+      console.log("hello");
+    } else {
+      res.status(404).json({ error: 'Address not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching coordinates:', error);
+    res.status(500).json({ error: 'Failed to fetch coordinates' });
+  }
+
+});
+
 app.listen(8000, () => {
     console.log('Server is running on port 8000');
 });
