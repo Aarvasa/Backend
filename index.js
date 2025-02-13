@@ -514,7 +514,10 @@ app.post('/post_rental_properties',async function(req,res){
 app.post('/all_rent_properties',async function(req,res){
 
   const propertiesSnapshot = await db.collection('RENT_PROPERTIES').get(); // Adjust the collection name
-  const properties = propertiesSnapshot.docs.map(doc => doc.data());
+  const properties = propertiesSnapshot.docs.map(doc => ({
+    id: doc.id, // Get document ID
+    ...doc.data() // Get document data
+}));
 
   console.log(properties);
 
@@ -530,7 +533,10 @@ app.post('/filter_rent_properties',async function(req,res){
     console.log(state);
 
     const propertiesSnapshot = await db.collection('RENT_PROPERTIES').get(); // Adjust the collection name
-    const properties = propertiesSnapshot.docs.map(doc => doc.data());
+    const properties = propertiesSnapshot.docs.map(doc => ({
+      id: doc.id, // Get document ID
+      ...doc.data() // Get document data
+  }));
     let prop = [];
     for(g in properties){
       
@@ -620,7 +626,10 @@ app.post('/filter_map_rent_properties',async function(req,res){
             }
             v.push(decimal_long);
             const propertiesSnapshot = await db.collection('RENT_PROPERTIES').get(); // Adjust the collection name
-            const properties = propertiesSnapshot.docs.map(doc => doc.data());
+            const properties = propertiesSnapshot.docs.map(doc => ({
+              id: doc.id, // Get document ID
+              ...doc.data() // Get document data
+          }));
             console.log(properties);
             const nearbyProperties = [];
             console.log("range  is");
@@ -681,7 +690,10 @@ app.post('/filter_map_rent_properties',async function(req,res){
             console.log(a);
             
             const propertiesSnapshot = await db.collection('RENT_PROPERTIES').get(); // Adjust the collection name
-            const properties = propertiesSnapshot.docs.map(doc => doc.data());
+            const properties = propertiesSnapshot.docs.map(doc => ({
+              id: doc.id, // Get document ID
+              ...doc.data() // Get document data
+          }));
             console.log(properties);
             const nearbyProperties = [];
             console.log("range  is");
@@ -915,7 +927,10 @@ app.post('/post_sale_properties',async function(req,res){
 app.post('/all_sale_properties',async function(req,res){
 
   const propertiesSnapshot = await db.collection('BUY_PROPERTIES').get(); // Adjust the collection name
-  const properties = propertiesSnapshot.docs.map(doc => doc.data());
+  const properties = propertiesSnapshot.docs.map(doc => ({
+    id: doc.id, // Get document ID
+    ...doc.data() // Get document data
+}));
 
   console.log(properties);
 
@@ -931,7 +946,10 @@ app.post('/filter_sale_properties',async function(req,res){
     console.log(state);
 
     const propertiesSnapshot = await db.collection('BUY_PROPERTIES').get(); // Adjust the collection name
-    const properties = propertiesSnapshot.docs.map(doc => doc.data());
+    const properties = propertiesSnapshot.docs.map(doc => ({
+      id: doc.id, // Get document ID
+      ...doc.data() // Get document data
+  }));
     let prop = [];
     for(g in properties){
       
@@ -1021,7 +1039,10 @@ app.post('/filter_map_sale_properties',async function(req,res){
             }
             v.push(decimal_long);
             const propertiesSnapshot = await db.collection('BUY_PROPERTIES').get(); // Adjust the collection name
-            const properties = propertiesSnapshot.docs.map(doc => doc.data());
+            const properties = propertiesSnapshot.docs.map(doc => ({
+              id: doc.id, // Get document ID
+              ...doc.data() // Get document data
+          }));
             console.log(properties);
             const nearbyProperties = [];
             console.log("range  is");
@@ -1082,7 +1103,10 @@ app.post('/filter_map_sale_properties',async function(req,res){
             console.log(a);
             
             const propertiesSnapshot = await db.collection('BUY_PROPERTIES').get(); // Adjust the collection name
-            const properties = propertiesSnapshot.docs.map(doc => doc.data());
+            const properties = propertiesSnapshot.docs.map(doc => ({
+              id: doc.id, // Get document ID
+              ...doc.data() // Get document data
+          }));
             console.log(properties);
             const nearbyProperties = [];
             console.log("range  is");
@@ -1310,7 +1334,10 @@ app.post('/post_sale_commercial_plots',async function(req,res){
 
 app.post('/all_commercial_sale_properties',async function(req,res){
   const propertiesSnapshot = await db.collection('commercial_plots_sell').get(); // Adjust the collection name
-  const properties = propertiesSnapshot.docs.map(doc => doc.data());
+  const properties = propertiesSnapshot.docs.map(doc => ({
+    id: doc.id, // Get document ID
+    ...doc.data() // Get document data
+}));
 
   console.log(properties);
 
@@ -1324,7 +1351,10 @@ app.post('/filter_commercial_sale_properties',async function(req,res){
     console.log(state);
 
     const propertiesSnapshot = await db.collection('commercial_plots_sell').get(); // Adjust the collection name
-    const properties = propertiesSnapshot.docs.map(doc => doc.data());
+    const properties = propertiesSnapshot.docs.map(doc => ({
+      id: doc.id, // Get document ID
+      ...doc.data() // Get document data
+  }));
     let prop = [];
     for(g in properties){
       
@@ -1414,7 +1444,10 @@ app.post('/filter_map_sale_commercial_plots',async function(req,res){
             }
             v.push(decimal_long);
             const propertiesSnapshot = await db.collection('commercial_plots_sell').get(); // Adjust the collection name
-            const properties = propertiesSnapshot.docs.map(doc => doc.data());
+            const properties = propertiesSnapshot.docs.map(doc => ({
+              id: doc.id, // Get document ID
+              ...doc.data() // Get document data
+          }));
             console.log(properties);
             const nearbyProperties = [];
             console.log("range  is");
@@ -1475,7 +1508,10 @@ app.post('/filter_map_sale_commercial_plots',async function(req,res){
             console.log(a);
             
             const propertiesSnapshot = await db.collection('commercial_plots_sell').get(); // Adjust the collection name
-            const properties = propertiesSnapshot.docs.map(doc => doc.data());
+            const properties = propertiesSnapshot.docs.map(doc => ({
+              id: doc.id, // Get document ID
+              ...doc.data() // Get document data
+          }));
             console.log(properties);
             const nearbyProperties = [];
             console.log("range  is");
@@ -1703,7 +1739,10 @@ app.post('/post_rent_commercial_plots',async function(req,res){
 
 app.post('/all_commercial_rent_properties',async function(req,res){
   const propertiesSnapshot = await db.collection('COMMERCIAL_PLOTS').get(); // Adjust the collection name
-  const properties = propertiesSnapshot.docs.map(doc => doc.data());
+  const properties = propertiesSnapshot.docs.map(doc => ({
+    id: doc.id, // Get document ID
+    ...doc.data() // Get document data
+}));
 
   console.log(properties);
 
@@ -1717,7 +1756,10 @@ app.post('/filter_commercial_rent_properties',async function(req,res){
     console.log(state);
 
     const propertiesSnapshot = await db.collection('COMMERCIAL_PLOTS').get(); // Adjust the collection name
-    const properties = propertiesSnapshot.docs.map(doc => doc.data());
+    const properties = propertiesSnapshot.docs.map(doc => ({
+      id: doc.id, // Get document ID
+      ...doc.data() // Get document data
+  }));
     let prop = [];
     for(g in properties){
       
@@ -1807,7 +1849,10 @@ app.post('/filter_map_rent_commercial_plots',async function(req,res){
             }
             v.push(decimal_long);
             const propertiesSnapshot = await db.collection('COMMERCIAL_PLOTS').get(); // Adjust the collection name
-            const properties = propertiesSnapshot.docs.map(doc => doc.data());
+            const properties = propertiesSnapshot.docs.map(doc => ({
+              id: doc.id, // Get document ID
+              ...doc.data() // Get document data
+          }));
             console.log(properties);
             const nearbyProperties = [];
             console.log("range  is");
@@ -1868,7 +1913,10 @@ app.post('/filter_map_rent_commercial_plots',async function(req,res){
             console.log(a);
             
             const propertiesSnapshot = await db.collection('COMMERCIAL_PLOTS').get(); // Adjust the collection name
-            const properties = propertiesSnapshot.docs.map(doc => doc.data());
+            const properties = propertiesSnapshot.docs.map(doc => ({
+              id: doc.id, // Get document ID
+              ...doc.data() // Get document data
+          }));
             console.log(properties);
             const nearbyProperties = [];
             console.log("range  is");
@@ -2110,7 +2158,10 @@ app.post('/filter_residential_rent_properties',async function(req,res){
     console.log(state);
 
     const propertiesSnapshot = await db.collection('RESIDENTIAL_PLOTS').get(); // Adjust the collection name
-    const properties = propertiesSnapshot.docs.map(doc => doc.data());
+    const properties = propertiesSnapshot.docs.map(doc => ({
+      id: doc.id, // Get document ID
+      ...doc.data() // Get document data
+  }));
     let prop = [];
     for(g in properties){
       
@@ -2200,7 +2251,10 @@ app.post('/filter_map_rent_residential_plots',async function(req,res){
             }
             v.push(decimal_long);
             const propertiesSnapshot = await db.collection('RESIDENTIAL_PLOTS').get(); // Adjust the collection name
-            const properties = propertiesSnapshot.docs.map(doc => doc.data());
+            const properties = propertiesSnapshot.docs.map(doc =>({
+              id: doc.id, // Get document ID
+              ...doc.data() // Get document data
+          }));
             console.log(properties);
             const nearbyProperties = [];
             console.log("range  is");
@@ -2261,7 +2315,10 @@ app.post('/filter_map_rent_residential_plots',async function(req,res){
             console.log(a);
             
             const propertiesSnapshot = await db.collection('RESIDENTIAL_PLOTS').get(); // Adjust the collection name
-            const properties = propertiesSnapshot.docs.map(doc => doc.data());
+            const properties = propertiesSnapshot.docs.map(doc => ({
+              id: doc.id, // Get document ID
+              ...doc.data() // Get document data
+          }));
             console.log(properties);
             const nearbyProperties = [];
             console.log("range  is");
@@ -2489,7 +2546,10 @@ app.post('/post_sale_residential_plots',async function(req,res){
 
 app.post('/all_residential_sale_properties',async function(req,res){
   const propertiesSnapshot = await db.collection('residential_plots_sell').get(); // Adjust the collection name
-  const properties = propertiesSnapshot.docs.map(doc => doc.data());
+  const properties = propertiesSnapshot.docs.map(doc => ({
+    id: doc.id, // Get document ID
+    ...doc.data() // Get document data
+}));
 
   console.log(properties);
 
@@ -2503,7 +2563,10 @@ app.post('/filter_residential_sale_properties',async function(req,res){
     console.log(state);
 
     const propertiesSnapshot = await db.collection('residential_plots_sell').get(); // Adjust the collection name
-    const properties = propertiesSnapshot.docs.map(doc => doc.data());
+    const properties = propertiesSnapshot.docs.map(doc => ({
+      id: doc.id, // Get document ID
+      ...doc.data() // Get document data
+  }));
     let prop = [];
     for(g in properties){
       
@@ -2593,7 +2656,10 @@ app.post('/filter_map_sale_residential_plots',async function(req,res){
             }
             v.push(decimal_long);
             const propertiesSnapshot = await db.collection('residential_plots_sell').get(); // Adjust the collection name
-            const properties = propertiesSnapshot.docs.map(doc => doc.data());
+            const properties = propertiesSnapshot.docs.map(doc => ({
+              id: doc.id, // Get document ID
+              ...doc.data() // Get document data
+          }));
             console.log(properties);
             const nearbyProperties = [];
             console.log("range  is");
@@ -2654,7 +2720,10 @@ app.post('/filter_map_sale_residential_plots',async function(req,res){
             console.log(a);
             
             const propertiesSnapshot = await db.collection('residential_plots_sell').get(); // Adjust the collection name
-            const properties = propertiesSnapshot.docs.map(doc => doc.data());
+            const properties = propertiesSnapshot.docs.map(doc => ({
+              id: doc.id, // Get document ID
+              ...doc.data() // Get document data
+          }));
             console.log(properties);
             const nearbyProperties = [];
             console.log("range  is");
@@ -2884,7 +2953,10 @@ app.post('/post_sell_commercial_workspace',async function(req,res){
 
 app.post('/all_commercial_workspace_sale_properties',async function(req,res){
   const propertiesSnapshot = await db.collection('commercial_work_spaces_sell').get(); // Adjust the collection name
-  const properties = propertiesSnapshot.docs.map(doc => doc.data());
+  const properties = propertiesSnapshot.docs.map(doc => ({
+    id: doc.id, // Get document ID
+    ...doc.data() // Get document data
+}));
 
   console.log(properties);
 
@@ -2898,7 +2970,10 @@ app.post('/filter_commercial_workspace_sale_properties',async function(req,res){
     console.log(state);
 
     const propertiesSnapshot = await db.collection('commercial_work_spaces_sell').get(); // Adjust the collection name
-    const properties = propertiesSnapshot.docs.map(doc => doc.data());
+    const properties = propertiesSnapshot.docs.map(doc => ({
+      id: doc.id, // Get document ID
+      ...doc.data() // Get document data
+  }));
     let prop = [];
     for(g in properties){
       
@@ -2988,7 +3063,10 @@ app.post('/filter_map_sale_commercial_workspace',async function(req,res){
             }
             v.push(decimal_long);
             const propertiesSnapshot = await db.collection('commercial_work_spaces_sell').get(); // Adjust the collection name
-            const properties = propertiesSnapshot.docs.map(doc => doc.data());
+            const properties = propertiesSnapshot.docs.map(doc => ({
+              id: doc.id, // Get document ID
+              ...doc.data() // Get document data
+          }));
             console.log(properties);
             const nearbyProperties = [];
             console.log("range  is");
@@ -3049,7 +3127,10 @@ app.post('/filter_map_sale_commercial_workspace',async function(req,res){
             console.log(a);
             
             const propertiesSnapshot = await db.collection('commercial_work_spaces_sell').get(); // Adjust the collection name
-            const properties = propertiesSnapshot.docs.map(doc => doc.data());
+            const properties = propertiesSnapshot.docs.map(doc => ({
+              id: doc.id, // Get document ID
+              ...doc.data() // Get document data
+          }));
             console.log(properties);
             const nearbyProperties = [];
             console.log("range  is");
@@ -3280,7 +3361,10 @@ app.post('/post_rent_commercial_workspace',async function(req,res){
 
 app.post('/all_commercial_workspace_rent_properties',async function(req,res){
   const propertiesSnapshot = await db.collection('COMMERCIAL_WORKSPACES').get(); // Adjust the collection name
-  const properties = propertiesSnapshot.docs.map(doc => doc.data());
+  const properties = propertiesSnapshot.docs.map(doc => ({
+    id: doc.id, // Get document ID
+    ...doc.data() // Get document data
+}));
 
   console.log(properties);
 
@@ -3294,7 +3378,10 @@ app.post('/filter_commercial_workspace_rent_properties',async function(req,res){
     console.log(state);
 
     const propertiesSnapshot = await db.collection('COMMERCIAL_WORKSPACES').get(); // Adjust the collection name
-    const properties = propertiesSnapshot.docs.map(doc => doc.data());
+    const properties = propertiesSnapshot.docs.map(doc => ({
+      id: doc.id, // Get document ID
+      ...doc.data() // Get document data
+  }));
     let prop = [];
     for(g in properties){
       
@@ -3384,7 +3471,10 @@ app.post('/filter_map_rent_commercial_workspace',async function(req,res){
             }
             v.push(decimal_long);
             const propertiesSnapshot = await db.collection('COMMERCIAL_WORKSPACES').get(); // Adjust the collection name
-            const properties = propertiesSnapshot.docs.map(doc => doc.data());
+            const properties = propertiesSnapshot.docs.map(doc => ({
+              id: doc.id, // Get document ID
+              ...doc.data() // Get document data
+          }));
             console.log(properties);
             const nearbyProperties = [];
             console.log("range  is");
@@ -3445,7 +3535,10 @@ app.post('/filter_map_rent_commercial_workspace',async function(req,res){
             console.log(a);
             
             const propertiesSnapshot = await db.collection('COMMERCIAL_WORKSPACES').get(); // Adjust the collection name
-            const properties = propertiesSnapshot.docs.map(doc => doc.data());
+            const properties = propertiesSnapshot.docs.map(doc => ({
+              id: doc.id, // Get document ID
+              ...doc.data() // Get document data
+          }));
             console.log(properties);
             const nearbyProperties = [];
             console.log("range  is");
@@ -3507,6 +3600,99 @@ app.post('/filter_map_rent_commercial_workspace',async function(req,res){
 
 
 
+app.post('/rate_property',async function(req,res){
+
+  try{
+
+    if(req.body.c == "rent_rating"){
+      let cfg = req.body.a.id;
+      const docRef = db.collection("RENT_PROPERTIES").doc(cfg);
+      let k = parseFloat(req.body.rt);
+
+      console.log(k);
+      console.log(req.body.rt);
+
+      let d = null;
+
+      if(k == 0){
+        let ooiu = parseInt(req.body.a.zero) + 1;
+        d={zero:ooiu};
+
+      }
+      if(k == 0.5){
+        let ooiu = parseInt(req.body.a.zero_point_five) + 1;
+        d={zero_point_five:ooiu};
+
+      }
+      if(k == 1){
+        let ooiu = parseInt(req.body.a.one) + 1;
+        d={one:ooiu};
+
+      }
+      if(k == 1.5){
+        let ooiu = parseInt(req.body.a.one_point_five) + 1;
+        d={one_point_five:ooiu};
+
+      }
+      if(k == 2){
+        let ooiu = parseInt(req.body.a.two) + 1;
+        d={two:ooiu};
+
+      }
+      if(k == 2.5){
+        let ooiu = parseInt(req.body.a.two_point_five) + 1;
+        d={two_point_five:ooiu};
+
+      }
+      if(k == 3){
+        let ooiu = parseInt(req.body.a.three) + 1;
+        d={three:ooiu};
+
+      }
+      if(k == 3.5){
+        let ooiu = parseInt(req.body.a.three_point_five) + 1;
+        d={three_point_five:ooiu};
+
+      }
+      if(k == 4){
+        let ooiu = parseInt(req.body.a.four) + 1;
+        d={four:ooiu};
+
+      }
+      if(k == 4.5){
+        let ooiu = parseInt(req.body.a.four_point_five) + 1;
+        d={four_point_five:ooiu};
+
+      }
+      if(k == 5){
+        let ooiu = parseInt(req.body.a.five) + 1;
+        d={five:ooiu};
+
+      }
+      if(d!=null){
+        await docRef.update(d);
+        console.log("updated doc");
+        res.json({message:"successful"});
+
+
+
+      }
+      
+
+      
+    }
+
+  }catch(error){
+
+    res.json({mssage:"unsuccessful"});
+
+
+
+  }
+
+
+
+});
 
 
 
