@@ -3682,6 +3682,548 @@ app.post('/rate_property',async function(req,res){
       
     }
 
+    if(req.body.c == "rent_commercial_plots_rating"){
+
+      let cfg = req.body.a.id;
+      const docRef = db.collection("COMMERCIAL_PLOTS").doc(cfg);
+      let k = parseFloat(req.body.rt);
+
+      console.log(k);
+      console.log(req.body.rt);
+
+      let d = null;
+
+      if(k == 0){
+        let ooiu = parseInt(req.body.a.zero) + 1;
+        d={zero:ooiu};
+
+      }
+      if(k == 0.5){
+        let ooiu = parseInt(req.body.a.zero_point_five) + 1;
+        d={zero_point_five:ooiu};
+
+      }
+      if(k == 1){
+        let ooiu = parseInt(req.body.a.one) + 1;
+        d={one:ooiu};
+
+      }
+      if(k == 1.5){
+        let ooiu = parseInt(req.body.a.one_point_five) + 1;
+        d={one_point_five:ooiu};
+
+      }
+      if(k == 2){
+        let ooiu = parseInt(req.body.a.two) + 1;
+        d={two:ooiu};
+
+      }
+      if(k == 2.5){
+        let ooiu = parseInt(req.body.a.two_point_five) + 1;
+        d={two_point_five:ooiu};
+
+      }
+      if(k == 3){
+        let ooiu = parseInt(req.body.a.three) + 1;
+        d={three:ooiu};
+
+      }
+      if(k == 3.5){
+        let ooiu = parseInt(req.body.a.three_point_five) + 1;
+        d={three_point_five:ooiu};
+
+      }
+      if(k == 4){
+        let ooiu = parseInt(req.body.a.four) + 1;
+        d={four:ooiu};
+
+      }
+      if(k == 4.5){
+        let ooiu = parseInt(req.body.a.four_point_five) + 1;
+        d={four_point_five:ooiu};
+
+      }
+      if(k == 5){
+        let ooiu = parseInt(req.body.a.five) + 1;
+        d={five:ooiu};
+
+      }
+      if(d!=null){
+        await docRef.update(d);
+        console.log("updated doc");
+        res.json({message:"successful"});
+
+
+
+      }
+      
+
+    }
+    if(req.body.c == "rent_commercial_workspace_rating"){
+
+      let cfg = req.body.a.id;
+      const docRef = db.collection("COMMERCIAL_WORKSPACES").doc(cfg);
+      let k = parseFloat(req.body.rt);
+
+      console.log(k);
+      console.log(req.body.rt);
+
+      let d = null;
+
+      if(k == 0){
+        let ooiu = parseInt(req.body.a.zero) + 1;
+        d={zero:ooiu};
+
+      }
+      if(k == 0.5){
+        let ooiu = parseInt(req.body.a.zero_point_five) + 1;
+        d={zero_point_five:ooiu};
+
+      }
+      if(k == 1){
+        let ooiu = parseInt(req.body.a.one) + 1;
+        d={one:ooiu};
+
+      }
+      if(k == 1.5){
+        let ooiu = parseInt(req.body.a.one_point_five) + 1;
+        d={one_point_five:ooiu};
+
+      }
+      if(k == 2){
+        let ooiu = parseInt(req.body.a.two) + 1;
+        d={two:ooiu};
+
+      }
+      if(k == 2.5){
+        let ooiu = parseInt(req.body.a.two_point_five) + 1;
+        d={two_point_five:ooiu};
+
+      }
+      if(k == 3){
+        let ooiu = parseInt(req.body.a.three) + 1;
+        d={three:ooiu};
+
+      }
+      if(k == 3.5){
+        let ooiu = parseInt(req.body.a.three_point_five) + 1;
+        d={three_point_five:ooiu};
+
+      }
+      if(k == 4){
+        let ooiu = parseInt(req.body.a.four) + 1;
+        d={four:ooiu};
+
+      }
+      if(k == 4.5){
+        let ooiu = parseInt(req.body.a.four_point_five) + 1;
+        d={four_point_five:ooiu};
+
+      }
+      if(k == 5){
+        let ooiu = parseInt(req.body.a.five) + 1;
+        d={five:ooiu};
+
+      }
+      if(d!=null){
+        await docRef.update(d);
+        console.log("updated doc");
+        res.json({message:"successful"});
+
+
+
+      }
+      
+
+    }
+
+    if(req.body.c == "rent_residential_plots_rating"){
+
+      let cfg = req.body.a.id;
+      const docRef = db.collection("RESIDENTIAL_PLOTS").doc(cfg);
+      let k = parseFloat(req.body.rt);
+
+      console.log(k);
+      console.log(req.body.rt);
+
+      let d = null;
+
+      if(k == 0){
+        let ooiu = parseInt(req.body.a.zero) + 1;
+        d={zero:ooiu};
+
+      }
+      if(k == 0.5){
+        let ooiu = parseInt(req.body.a.zero_point_five) + 1;
+        d={zero_point_five:ooiu};
+
+      }
+      if(k == 1){
+        let ooiu = parseInt(req.body.a.one) + 1;
+        d={one:ooiu};
+
+      }
+      if(k == 1.5){
+        let ooiu = parseInt(req.body.a.one_point_five) + 1;
+        d={one_point_five:ooiu};
+
+      }
+      if(k == 2){
+        let ooiu = parseInt(req.body.a.two) + 1;
+        d={two:ooiu};
+
+      }
+      if(k == 2.5){
+        let ooiu = parseInt(req.body.a.two_point_five) + 1;
+        d={two_point_five:ooiu};
+
+      }
+      if(k == 3){
+        let ooiu = parseInt(req.body.a.three) + 1;
+        d={three:ooiu};
+
+      }
+      if(k == 3.5){
+        let ooiu = parseInt(req.body.a.three_point_five) + 1;
+        d={three_point_five:ooiu};
+
+      }
+      if(k == 4){
+        let ooiu = parseInt(req.body.a.four) + 1;
+        d={four:ooiu};
+
+      }
+      if(k == 4.5){
+        let ooiu = parseInt(req.body.a.four_point_five) + 1;
+        d={four_point_five:ooiu};
+
+      }
+      if(k == 5){
+        let ooiu = parseInt(req.body.a.five) + 1;
+        d={five:ooiu};
+
+      }
+      if(d!=null){
+        await docRef.update(d);
+        console.log("updated doc");
+        res.json({message:"successful"});
+
+
+
+      }
+      
+
+    }
+    if(req.body.c == "sale_commercial_plots_rating"){
+
+      let cfg = req.body.a.id;
+      const docRef = db.collection("commercial_plots_sell").doc(cfg);
+      let k = parseFloat(req.body.rt);
+
+      console.log(k);
+      console.log(req.body.rt);
+
+      let d = null;
+
+      if(k == 0){
+        let ooiu = parseInt(req.body.a.zero) + 1;
+        d={zero:ooiu};
+
+      }
+      if(k == 0.5){
+        let ooiu = parseInt(req.body.a.zero_point_five) + 1;
+        d={zero_point_five:ooiu};
+
+      }
+      if(k == 1){
+        let ooiu = parseInt(req.body.a.one) + 1;
+        d={one:ooiu};
+
+      }
+      if(k == 1.5){
+        let ooiu = parseInt(req.body.a.one_point_five) + 1;
+        d={one_point_five:ooiu};
+
+      }
+      if(k == 2){
+        let ooiu = parseInt(req.body.a.two) + 1;
+        d={two:ooiu};
+
+      }
+      if(k == 2.5){
+        let ooiu = parseInt(req.body.a.two_point_five) + 1;
+        d={two_point_five:ooiu};
+
+      }
+      if(k == 3){
+        let ooiu = parseInt(req.body.a.three) + 1;
+        d={three:ooiu};
+
+      }
+      if(k == 3.5){
+        let ooiu = parseInt(req.body.a.three_point_five) + 1;
+        d={three_point_five:ooiu};
+
+      }
+      if(k == 4){
+        let ooiu = parseInt(req.body.a.four) + 1;
+        d={four:ooiu};
+
+      }
+      if(k == 4.5){
+        let ooiu = parseInt(req.body.a.four_point_five) + 1;
+        d={four_point_five:ooiu};
+
+      }
+      if(k == 5){
+        let ooiu = parseInt(req.body.a.five) + 1;
+        d={five:ooiu};
+
+      }
+      if(d!=null){
+        await docRef.update(d);
+        console.log("updated doc");
+        res.json({message:"successful"});
+
+
+
+      }
+      
+
+    }
+
+    if(req.body.c == "sale_commercial_workspace_rating"){
+
+      let cfg = req.body.a.id;
+      const docRef = db.collection("commercial_work_spaces_sell").doc(cfg);
+      let k = parseFloat(req.body.rt);
+
+      console.log(k);
+      console.log(req.body.rt);
+
+      let d = null;
+
+      if(k == 0){
+        let ooiu = parseInt(req.body.a.zero) + 1;
+        d={zero:ooiu};
+
+      }
+      if(k == 0.5){
+        let ooiu = parseInt(req.body.a.zero_point_five) + 1;
+        d={zero_point_five:ooiu};
+
+      }
+      if(k == 1){
+        let ooiu = parseInt(req.body.a.one) + 1;
+        d={one:ooiu};
+
+      }
+      if(k == 1.5){
+        let ooiu = parseInt(req.body.a.one_point_five) + 1;
+        d={one_point_five:ooiu};
+
+      }
+      if(k == 2){
+        let ooiu = parseInt(req.body.a.two) + 1;
+        d={two:ooiu};
+
+      }
+      if(k == 2.5){
+        let ooiu = parseInt(req.body.a.two_point_five) + 1;
+        d={two_point_five:ooiu};
+
+      }
+      if(k == 3){
+        let ooiu = parseInt(req.body.a.three) + 1;
+        d={three:ooiu};
+
+      }
+      if(k == 3.5){
+        let ooiu = parseInt(req.body.a.three_point_five) + 1;
+        d={three_point_five:ooiu};
+
+      }
+      if(k == 4){
+        let ooiu = parseInt(req.body.a.four) + 1;
+        d={four:ooiu};
+
+      }
+      if(k == 4.5){
+        let ooiu = parseInt(req.body.a.four_point_five) + 1;
+        d={four_point_five:ooiu};
+
+      }
+      if(k == 5){
+        let ooiu = parseInt(req.body.a.five) + 1;
+        d={five:ooiu};
+
+      }
+      if(d!=null){
+        await docRef.update(d);
+        console.log("updated doc");
+        res.json({message:"successful"});
+
+
+
+      }
+      
+
+    }
+    if(req.body.c == "sale_properties_rating"){
+
+      let cfg = req.body.a.id;
+      const docRef = db.collection("BUY_PROPERTIES").doc(cfg);
+      let k = parseFloat(req.body.rt);
+
+      console.log(k);
+      console.log(req.body.rt);
+
+      let d = null;
+
+      if(k == 0){
+        let ooiu = parseInt(req.body.a.zero) + 1;
+        d={zero:ooiu};
+
+      }
+      if(k == 0.5){
+        let ooiu = parseInt(req.body.a.zero_point_five) + 1;
+        d={zero_point_five:ooiu};
+
+      }
+      if(k == 1){
+        let ooiu = parseInt(req.body.a.one) + 1;
+        d={one:ooiu};
+
+      }
+      if(k == 1.5){
+        let ooiu = parseInt(req.body.a.one_point_five) + 1;
+        d={one_point_five:ooiu};
+
+      }
+      if(k == 2){
+        let ooiu = parseInt(req.body.a.two) + 1;
+        d={two:ooiu};
+
+      }
+      if(k == 2.5){
+        let ooiu = parseInt(req.body.a.two_point_five) + 1;
+        d={two_point_five:ooiu};
+
+      }
+      if(k == 3){
+        let ooiu = parseInt(req.body.a.three) + 1;
+        d={three:ooiu};
+
+      }
+      if(k == 3.5){
+        let ooiu = parseInt(req.body.a.three_point_five) + 1;
+        d={three_point_five:ooiu};
+
+      }
+      if(k == 4){
+        let ooiu = parseInt(req.body.a.four) + 1;
+        d={four:ooiu};
+
+      }
+      if(k == 4.5){
+        let ooiu = parseInt(req.body.a.four_point_five) + 1;
+        d={four_point_five:ooiu};
+
+      }
+      if(k == 5){
+        let ooiu = parseInt(req.body.a.five) + 1;
+        d={five:ooiu};
+
+      }
+      if(d!=null){
+        await docRef.update(d);
+        console.log("updated doc");
+        res.json({message:"successful"});
+
+
+
+      }
+      
+
+    }
+    if(req.body.c == "sale_residential_plots_rating"){
+
+      let cfg = req.body.a.id;
+      const docRef = db.collection("residential_plots_sell").doc(cfg);
+      let k = parseFloat(req.body.rt);
+
+      console.log(k);
+      console.log(req.body.rt);
+
+      let d = null;
+
+      if(k == 0){
+        let ooiu = parseInt(req.body.a.zero) + 1;
+        d={zero:ooiu};
+
+      }
+      if(k == 0.5){
+        let ooiu = parseInt(req.body.a.zero_point_five) + 1;
+        d={zero_point_five:ooiu};
+
+      }
+      if(k == 1){
+        let ooiu = parseInt(req.body.a.one) + 1;
+        d={one:ooiu};
+
+      }
+      if(k == 1.5){
+        let ooiu = parseInt(req.body.a.one_point_five) + 1;
+        d={one_point_five:ooiu};
+
+      }
+      if(k == 2){
+        let ooiu = parseInt(req.body.a.two) + 1;
+        d={two:ooiu};
+
+      }
+      if(k == 2.5){
+        let ooiu = parseInt(req.body.a.two_point_five) + 1;
+        d={two_point_five:ooiu};
+
+      }
+      if(k == 3){
+        let ooiu = parseInt(req.body.a.three) + 1;
+        d={three:ooiu};
+
+      }
+      if(k == 3.5){
+        let ooiu = parseInt(req.body.a.three_point_five) + 1;
+        d={three_point_five:ooiu};
+
+      }
+      if(k == 4){
+        let ooiu = parseInt(req.body.a.four) + 1;
+        d={four:ooiu};
+
+      }
+      if(k == 4.5){
+        let ooiu = parseInt(req.body.a.four_point_five) + 1;
+        d={four_point_five:ooiu};
+
+      }
+      if(k == 5){
+        let ooiu = parseInt(req.body.a.five) + 1;
+        d={five:ooiu};
+
+      }
+      if(d!=null){
+        await docRef.update(d);
+        console.log("updated doc");
+        res.json({message:"successful"});
+
+
+
+      }
+      
+
+    }
+
   }catch(error){
 
     res.json({mssage:"unsuccessful"});
