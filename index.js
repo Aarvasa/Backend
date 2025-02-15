@@ -10,6 +10,14 @@ const cloudinary = require('cloudinary').v2;
 var admin = require("firebase-admin");
 const { Country, State, City } = require("country-state-city");
 
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER, // Load from .env file
+    pass: process.env.EMAIL_PASS, // Load from .env file
+  },
+});
+
 let service_account = {
   "type": "service_account",
   "project_id": "aarvasa-property-listing",
@@ -4338,6 +4346,21 @@ app.post('/rate_property',async function(req,res){
 
 
 app.post('/send_consultation',async function(req,res){
+
+  try {
+
+    const mailOptions = {
+       // Sender's email from request body
+      to: "theaarvasa@gmail.com", // Replace with Aarvasa's email
+      subject: "Consultation", // Fixed subject
+      text: "Hi, I want to consult Aarvasa", // Fixed message
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    res.json({message:"successful"});
+  } catch (error) {
+    console.error("Error sending email:", error);
+  }
 
 });
 
