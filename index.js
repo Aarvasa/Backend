@@ -4578,6 +4578,7 @@ app.post('/rate_property',async function(req,res){
 
       console.log(k);
       console.log(req.body.rt);
+      
 
       let d = null;
 
