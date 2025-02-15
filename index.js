@@ -1,5 +1,6 @@
 require('dotenv').config();
 let express = require('express');
+const nodemailer = require("nodemailer");
 let app = express();
 let bodyParser = require('body-parser');
 let path = require('path');
@@ -3606,6 +3607,19 @@ app.post('/rate_property',async function(req,res){
 
     if(req.body.c == "rent_rating"){
       let cfg = req.body.a.id;
+      let rhd = null;
+      await db.collection("RENT_PROPERTIES").doc(cfg).get()
+    .then((doc) => {
+        if (doc.exists) {
+            rhd = doc.data();
+        } else {
+            console.log("No such document!");
+        }
+    })
+    .catch((error) => {
+        console.error("Error getting document:", error);
+    });
+
       const docRef = db.collection("RENT_PROPERTIES").doc(cfg);
       let k = parseFloat(req.body.rt);
 
@@ -3615,57 +3629,57 @@ app.post('/rate_property',async function(req,res){
       let d = null;
 
       if(k == 0){
-        let ooiu = parseInt(req.body.a.zero) + 1;
+        let ooiu = parseInt(rhd.zero) + 1;
         d={zero:ooiu};
 
       }
       if(k == 0.5){
-        let ooiu = parseInt(req.body.a.zero_point_five) + 1;
+        let ooiu = parseInt(rhd.zero_point_five) + 1;
         d={zero_point_five:ooiu};
 
       }
       if(k == 1){
-        let ooiu = parseInt(req.body.a.one) + 1;
+        let ooiu = parseInt(rhd.one) + 1;
         d={one:ooiu};
 
       }
       if(k == 1.5){
-        let ooiu = parseInt(req.body.a.one_point_five) + 1;
+        let ooiu = parseInt(rhd.one_point_five) + 1;
         d={one_point_five:ooiu};
 
       }
       if(k == 2){
-        let ooiu = parseInt(req.body.a.two) + 1;
+        let ooiu = parseInt(rhd.two) + 1;
         d={two:ooiu};
 
       }
       if(k == 2.5){
-        let ooiu = parseInt(req.body.a.two_point_five) + 1;
+        let ooiu = parseInt(rhd.two_point_five) + 1;
         d={two_point_five:ooiu};
 
       }
       if(k == 3){
-        let ooiu = parseInt(req.body.a.three) + 1;
+        let ooiu = parseInt(rhd.three) + 1;
         d={three:ooiu};
 
       }
       if(k == 3.5){
-        let ooiu = parseInt(req.body.a.three_point_five) + 1;
+        let ooiu = parseInt(rhd.three_point_five) + 1;
         d={three_point_five:ooiu};
 
       }
       if(k == 4){
-        let ooiu = parseInt(req.body.a.four) + 1;
+        let ooiu = parseInt(rhd.four) + 1;
         d={four:ooiu};
 
       }
       if(k == 4.5){
-        let ooiu = parseInt(req.body.a.four_point_five) + 1;
+        let ooiu = parseInt(rhd.four_point_five) + 1;
         d={four_point_five:ooiu};
 
       }
       if(k == 5){
-        let ooiu = parseInt(req.body.a.five) + 1;
+        let ooiu = parseInt(rhd.five) + 1;
         d={five:ooiu};
 
       }
@@ -3685,6 +3699,18 @@ app.post('/rate_property',async function(req,res){
     if(req.body.c == "rent_commercial_plots_rating"){
 
       let cfg = req.body.a.id;
+      let rhd = null;
+      await db.collection("COMMERCIAL_PLOTS").doc(cfg).get()
+    .then((doc) => {
+        if (doc.exists) {
+            rhd = doc.data();
+        } else {
+            console.log("No such document!");
+        }
+    })
+    .catch((error) => {
+        console.error("Error getting document:", error);
+    });
       const docRef = db.collection("COMMERCIAL_PLOTS").doc(cfg);
       let k = parseFloat(req.body.rt);
 
@@ -3694,57 +3720,57 @@ app.post('/rate_property',async function(req,res){
       let d = null;
 
       if(k == 0){
-        let ooiu = parseInt(req.body.a.zero) + 1;
+        let ooiu = parseInt(rhd.zero) + 1;
         d={zero:ooiu};
 
       }
       if(k == 0.5){
-        let ooiu = parseInt(req.body.a.zero_point_five) + 1;
+        let ooiu = parseInt(rhd.zero_point_five) + 1;
         d={zero_point_five:ooiu};
 
       }
       if(k == 1){
-        let ooiu = parseInt(req.body.a.one) + 1;
+        let ooiu = parseInt(rhd.one) + 1;
         d={one:ooiu};
 
       }
       if(k == 1.5){
-        let ooiu = parseInt(req.body.a.one_point_five) + 1;
+        let ooiu = parseInt(rhd.one_point_five) + 1;
         d={one_point_five:ooiu};
 
       }
       if(k == 2){
-        let ooiu = parseInt(req.body.a.two) + 1;
+        let ooiu = parseInt(rhd.two) + 1;
         d={two:ooiu};
 
       }
       if(k == 2.5){
-        let ooiu = parseInt(req.body.a.two_point_five) + 1;
+        let ooiu = parseInt(rhd.two_point_five) + 1;
         d={two_point_five:ooiu};
 
       }
       if(k == 3){
-        let ooiu = parseInt(req.body.a.three) + 1;
+        let ooiu = parseInt(rhd.three) + 1;
         d={three:ooiu};
 
       }
       if(k == 3.5){
-        let ooiu = parseInt(req.body.a.three_point_five) + 1;
+        let ooiu = parseInt(rhd.three_point_five) + 1;
         d={three_point_five:ooiu};
 
       }
       if(k == 4){
-        let ooiu = parseInt(req.body.a.four) + 1;
+        let ooiu = parseInt(rhd.four) + 1;
         d={four:ooiu};
 
       }
       if(k == 4.5){
-        let ooiu = parseInt(req.body.a.four_point_five) + 1;
+        let ooiu = parseInt(rhd.four_point_five) + 1;
         d={four_point_five:ooiu};
 
       }
       if(k == 5){
-        let ooiu = parseInt(req.body.a.five) + 1;
+        let ooiu = parseInt(rhd.five) + 1;
         d={five:ooiu};
 
       }
@@ -3762,6 +3788,20 @@ app.post('/rate_property',async function(req,res){
     if(req.body.c == "rent_commercial_workspace_rating"){
 
       let cfg = req.body.a.id;
+
+      let rhd = null;
+      await db.collection("COMMERCIAL_WORKSPACES").doc(cfg).get()
+    .then((doc) => {
+        if (doc.exists) {
+            rhd = doc.data();
+        } else {
+            console.log("No such document!");
+        }
+    })
+    .catch((error) => {
+        console.error("Error getting document:", error);
+    });
+      
       const docRef = db.collection("COMMERCIAL_WORKSPACES").doc(cfg);
       let k = parseFloat(req.body.rt);
 
@@ -3771,57 +3811,57 @@ app.post('/rate_property',async function(req,res){
       let d = null;
 
       if(k == 0){
-        let ooiu = parseInt(req.body.a.zero) + 1;
+        let ooiu = parseInt(rhd.zero) + 1;
         d={zero:ooiu};
 
       }
       if(k == 0.5){
-        let ooiu = parseInt(req.body.a.zero_point_five) + 1;
+        let ooiu = parseInt(rhd.zero_point_five) + 1;
         d={zero_point_five:ooiu};
 
       }
       if(k == 1){
-        let ooiu = parseInt(req.body.a.one) + 1;
+        let ooiu = parseInt(rhd.one) + 1;
         d={one:ooiu};
 
       }
       if(k == 1.5){
-        let ooiu = parseInt(req.body.a.one_point_five) + 1;
+        let ooiu = parseInt(rhd.one_point_five) + 1;
         d={one_point_five:ooiu};
 
       }
       if(k == 2){
-        let ooiu = parseInt(req.body.a.two) + 1;
+        let ooiu = parseInt(rhd.two) + 1;
         d={two:ooiu};
 
       }
       if(k == 2.5){
-        let ooiu = parseInt(req.body.a.two_point_five) + 1;
+        let ooiu = parseInt(rhd.two_point_five) + 1;
         d={two_point_five:ooiu};
 
       }
       if(k == 3){
-        let ooiu = parseInt(req.body.a.three) + 1;
+        let ooiu = parseInt(rhd.three) + 1;
         d={three:ooiu};
 
       }
       if(k == 3.5){
-        let ooiu = parseInt(req.body.a.three_point_five) + 1;
+        let ooiu = parseInt(rhd.three_point_five) + 1;
         d={three_point_five:ooiu};
 
       }
       if(k == 4){
-        let ooiu = parseInt(req.body.a.four) + 1;
+        let ooiu = parseInt(rhd.four) + 1;
         d={four:ooiu};
 
       }
       if(k == 4.5){
-        let ooiu = parseInt(req.body.a.four_point_five) + 1;
+        let ooiu = parseInt(rhd.four_point_five) + 1;
         d={four_point_five:ooiu};
 
       }
       if(k == 5){
-        let ooiu = parseInt(req.body.a.five) + 1;
+        let ooiu = parseInt(rhd.five) + 1;
         d={five:ooiu};
 
       }
@@ -3840,6 +3880,18 @@ app.post('/rate_property',async function(req,res){
     if(req.body.c == "rent_residential_plots_rating"){
 
       let cfg = req.body.a.id;
+      let rhd = null;
+      await db.collection("RESIDENTIAL_PLOTS").doc(cfg).get()
+    .then((doc) => {
+        if (doc.exists) {
+            rhd = doc.data();
+        } else {
+            console.log("No such document!");
+        }
+    })
+    .catch((error) => {
+        console.error("Error getting document:", error);
+    });
       const docRef = db.collection("RESIDENTIAL_PLOTS").doc(cfg);
       let k = parseFloat(req.body.rt);
 
@@ -3849,57 +3901,57 @@ app.post('/rate_property',async function(req,res){
       let d = null;
 
       if(k == 0){
-        let ooiu = parseInt(req.body.a.zero) + 1;
+        let ooiu = parseInt(rhd.zero) + 1;
         d={zero:ooiu};
 
       }
       if(k == 0.5){
-        let ooiu = parseInt(req.body.a.zero_point_five) + 1;
+        let ooiu = parseInt(rhd.zero_point_five) + 1;
         d={zero_point_five:ooiu};
 
       }
       if(k == 1){
-        let ooiu = parseInt(req.body.a.one) + 1;
+        let ooiu = parseInt(rhd.one) + 1;
         d={one:ooiu};
 
       }
       if(k == 1.5){
-        let ooiu = parseInt(req.body.a.one_point_five) + 1;
+        let ooiu = parseInt(rhd.one_point_five) + 1;
         d={one_point_five:ooiu};
 
       }
       if(k == 2){
-        let ooiu = parseInt(req.body.a.two) + 1;
+        let ooiu = parseInt(rhd.two) + 1;
         d={two:ooiu};
 
       }
       if(k == 2.5){
-        let ooiu = parseInt(req.body.a.two_point_five) + 1;
+        let ooiu = parseInt(rhd.two_point_five) + 1;
         d={two_point_five:ooiu};
 
       }
       if(k == 3){
-        let ooiu = parseInt(req.body.a.three) + 1;
+        let ooiu = parseInt(rhd.three) + 1;
         d={three:ooiu};
 
       }
       if(k == 3.5){
-        let ooiu = parseInt(req.body.a.three_point_five) + 1;
+        let ooiu = parseInt(rhd.three_point_five) + 1;
         d={three_point_five:ooiu};
 
       }
       if(k == 4){
-        let ooiu = parseInt(req.body.a.four) + 1;
+        let ooiu = parseInt(rhd.four) + 1;
         d={four:ooiu};
 
       }
       if(k == 4.5){
-        let ooiu = parseInt(req.body.a.four_point_five) + 1;
+        let ooiu = parseInt(rhd.four_point_five) + 1;
         d={four_point_five:ooiu};
 
       }
       if(k == 5){
-        let ooiu = parseInt(req.body.a.five) + 1;
+        let ooiu = parseInt(rhd.five) + 1;
         d={five:ooiu};
 
       }
@@ -3917,6 +3969,18 @@ app.post('/rate_property',async function(req,res){
     if(req.body.c == "sale_commercial_plots_rating"){
 
       let cfg = req.body.a.id;
+      let rhd = null;
+      await db.collection("commercial_plots_sell").doc(cfg).get()
+    .then((doc) => {
+        if (doc.exists) {
+            rhd = doc.data();
+        } else {
+            console.log("No such document!");
+        }
+    })
+    .catch((error) => {
+        console.error("Error getting document:", error);
+    });
       const docRef = db.collection("commercial_plots_sell").doc(cfg);
       let k = parseFloat(req.body.rt);
 
@@ -3926,42 +3990,42 @@ app.post('/rate_property',async function(req,res){
       let d = null;
 
       if(k == 0){
-        let ooiu = parseInt(req.body.a.zero) + 1;
+        let ooiu = parseInt(rhd.zero) + 1;
         d={zero:ooiu};
 
       }
       if(k == 0.5){
-        let ooiu = parseInt(req.body.a.zero_point_five) + 1;
+        let ooiu = parseInt(rhd.zero_point_five) + 1;
         d={zero_point_five:ooiu};
 
       }
       if(k == 1){
-        let ooiu = parseInt(req.body.a.one) + 1;
+        let ooiu = parseInt(rhd.one) + 1;
         d={one:ooiu};
 
       }
       if(k == 1.5){
-        let ooiu = parseInt(req.body.a.one_point_five) + 1;
+        let ooiu = parseInt(rhd.one_point_five) + 1;
         d={one_point_five:ooiu};
 
       }
       if(k == 2){
-        let ooiu = parseInt(req.body.a.two) + 1;
+        let ooiu = parseInt(rhd.two) + 1;
         d={two:ooiu};
 
       }
       if(k == 2.5){
-        let ooiu = parseInt(req.body.a.two_point_five) + 1;
+        let ooiu = parseInt(rhd.two_point_five) + 1;
         d={two_point_five:ooiu};
 
       }
       if(k == 3){
-        let ooiu = parseInt(req.body.a.three) + 1;
+        let ooiu = parseInt(rhd.three) + 1;
         d={three:ooiu};
 
       }
       if(k == 3.5){
-        let ooiu = parseInt(req.body.a.three_point_five) + 1;
+        let ooiu = parseInt(rhd.three_point_five) + 1;
         d={three_point_five:ooiu};
 
       }
@@ -3971,12 +4035,12 @@ app.post('/rate_property',async function(req,res){
 
       }
       if(k == 4.5){
-        let ooiu = parseInt(req.body.a.four_point_five) + 1;
+        let ooiu = parseInt(rhd.four_point_five) + 1;
         d={four_point_five:ooiu};
 
       }
       if(k == 5){
-        let ooiu = parseInt(req.body.a.five) + 1;
+        let ooiu = parseInt(rhd.five) + 1;
         d={five:ooiu};
 
       }
@@ -3995,6 +4059,18 @@ app.post('/rate_property',async function(req,res){
     if(req.body.c == "sale_commercial_workspace_rating"){
 
       let cfg = req.body.a.id;
+      let rhd = null;
+      await db.collection("commercial_work_spaces_sell").doc(cfg).get()
+    .then((doc) => {
+        if (doc.exists) {
+            rhd = doc.data();
+        } else {
+            console.log("No such document!");
+        }
+    })
+    .catch((error) => {
+        console.error("Error getting document:", error);
+    });
       const docRef = db.collection("commercial_work_spaces_sell").doc(cfg);
       let k = parseFloat(req.body.rt);
 
@@ -4004,57 +4080,57 @@ app.post('/rate_property',async function(req,res){
       let d = null;
 
       if(k == 0){
-        let ooiu = parseInt(req.body.a.zero) + 1;
+        let ooiu = parseInt(rhd.zero) + 1;
         d={zero:ooiu};
 
       }
       if(k == 0.5){
-        let ooiu = parseInt(req.body.a.zero_point_five) + 1;
+        let ooiu = parseInt(rhd.zero_point_five) + 1;
         d={zero_point_five:ooiu};
 
       }
       if(k == 1){
-        let ooiu = parseInt(req.body.a.one) + 1;
+        let ooiu = parseInt(rhd.one) + 1;
         d={one:ooiu};
 
       }
       if(k == 1.5){
-        let ooiu = parseInt(req.body.a.one_point_five) + 1;
+        let ooiu = parseInt(rhd.one_point_five) + 1;
         d={one_point_five:ooiu};
 
       }
       if(k == 2){
-        let ooiu = parseInt(req.body.a.two) + 1;
+        let ooiu = parseInt(rhd.two) + 1;
         d={two:ooiu};
 
       }
       if(k == 2.5){
-        let ooiu = parseInt(req.body.a.two_point_five) + 1;
+        let ooiu = parseInt(rhd.two_point_five) + 1;
         d={two_point_five:ooiu};
 
       }
       if(k == 3){
-        let ooiu = parseInt(req.body.a.three) + 1;
+        let ooiu = parseInt(rhd.three) + 1;
         d={three:ooiu};
 
       }
       if(k == 3.5){
-        let ooiu = parseInt(req.body.a.three_point_five) + 1;
+        let ooiu = parseInt(rhd.three_point_five) + 1;
         d={three_point_five:ooiu};
 
       }
       if(k == 4){
-        let ooiu = parseInt(req.body.a.four) + 1;
+        let ooiu = parseInt(rhd.four) + 1;
         d={four:ooiu};
 
       }
       if(k == 4.5){
-        let ooiu = parseInt(req.body.a.four_point_five) + 1;
+        let ooiu = parseInt(rhd.four_point_five) + 1;
         d={four_point_five:ooiu};
 
       }
       if(k == 5){
-        let ooiu = parseInt(req.body.a.five) + 1;
+        let ooiu = parseInt(rhd.five) + 1;
         d={five:ooiu};
 
       }
@@ -4072,6 +4148,18 @@ app.post('/rate_property',async function(req,res){
     if(req.body.c == "sale_properties_rating"){
 
       let cfg = req.body.a.id;
+      let rhd=null;
+      await db.collection("BUY_PROPERTIES").doc(cfg).get()
+    .then((doc) => {
+        if (doc.exists) {
+            rhd = doc.data();
+        } else {
+            console.log("No such document!");
+        }
+    })
+    .catch((error) => {
+        console.error("Error getting document:", error);
+    });
       const docRef = db.collection("BUY_PROPERTIES").doc(cfg);
       let k = parseFloat(req.body.rt);
 
@@ -4081,57 +4169,57 @@ app.post('/rate_property',async function(req,res){
       let d = null;
 
       if(k == 0){
-        let ooiu = parseInt(req.body.a.zero) + 1;
+        let ooiu = parseInt(rhd.zero) + 1;
         d={zero:ooiu};
 
       }
       if(k == 0.5){
-        let ooiu = parseInt(req.body.a.zero_point_five) + 1;
+        let ooiu = parseInt(rhd.zero_point_five) + 1;
         d={zero_point_five:ooiu};
 
       }
       if(k == 1){
-        let ooiu = parseInt(req.body.a.one) + 1;
+        let ooiu = parseInt(rhd.one) + 1;
         d={one:ooiu};
 
       }
       if(k == 1.5){
-        let ooiu = parseInt(req.body.a.one_point_five) + 1;
+        let ooiu = parseInt(rhd.one_point_five) + 1;
         d={one_point_five:ooiu};
 
       }
       if(k == 2){
-        let ooiu = parseInt(req.body.a.two) + 1;
+        let ooiu = parseInt(rhd.two) + 1;
         d={two:ooiu};
 
       }
       if(k == 2.5){
-        let ooiu = parseInt(req.body.a.two_point_five) + 1;
+        let ooiu = parseInt(rhd.two_point_five) + 1;
         d={two_point_five:ooiu};
 
       }
       if(k == 3){
-        let ooiu = parseInt(req.body.a.three) + 1;
+        let ooiu = parseInt(rhd.three) + 1;
         d={three:ooiu};
 
       }
       if(k == 3.5){
-        let ooiu = parseInt(req.body.a.three_point_five) + 1;
+        let ooiu = parseInt(rhd.three_point_five) + 1;
         d={three_point_five:ooiu};
 
       }
       if(k == 4){
-        let ooiu = parseInt(req.body.a.four) + 1;
+        let ooiu = parseInt(rhd.four) + 1;
         d={four:ooiu};
 
       }
       if(k == 4.5){
-        let ooiu = parseInt(req.body.a.four_point_five) + 1;
+        let ooiu = parseInt(rhd.four_point_five) + 1;
         d={four_point_five:ooiu};
 
       }
       if(k == 5){
-        let ooiu = parseInt(req.body.a.five) + 1;
+        let ooiu = parseInt(rhd.five) + 1;
         d={five:ooiu};
 
       }
@@ -4149,6 +4237,18 @@ app.post('/rate_property',async function(req,res){
     if(req.body.c == "sale_residential_plots_rating"){
 
       let cfg = req.body.a.id;
+      let rhd=null;
+      await db.collection("residential_plots_sell").doc(cfg).get()
+    .then((doc) => {
+        if (doc.exists) {
+            rhd = doc.data();
+        } else {
+            console.log("No such document!");
+        }
+    })
+    .catch((error) => {
+        console.error("Error getting document:", error);
+    });
       const docRef = db.collection("residential_plots_sell").doc(cfg);
       let k = parseFloat(req.body.rt);
 
@@ -4158,12 +4258,12 @@ app.post('/rate_property',async function(req,res){
       let d = null;
 
       if(k == 0){
-        let ooiu = parseInt(req.body.a.zero) + 1;
+        let ooiu = parseInt(rhd.zero) + 1;
         d={zero:ooiu};
 
       }
       if(k == 0.5){
-        let ooiu = parseInt(req.body.a.zero_point_five) + 1;
+        let ooiu = parseInt(rhd.zero_point_five) + 1;
         d={zero_point_five:ooiu};
 
       }
@@ -4173,7 +4273,7 @@ app.post('/rate_property',async function(req,res){
 
       }
       if(k == 1.5){
-        let ooiu = parseInt(req.body.a.one_point_five) + 1;
+        let ooiu = parseInt(rhd.one_point_five) + 1;
         d={one_point_five:ooiu};
 
       }
@@ -4183,32 +4283,32 @@ app.post('/rate_property',async function(req,res){
 
       }
       if(k == 2.5){
-        let ooiu = parseInt(req.body.a.two_point_five) + 1;
+        let ooiu = parseInt(rhd.two_point_five) + 1;
         d={two_point_five:ooiu};
 
       }
       if(k == 3){
-        let ooiu = parseInt(req.body.a.three) + 1;
+        let ooiu = parseInt(rhd.three) + 1;
         d={three:ooiu};
 
       }
       if(k == 3.5){
-        let ooiu = parseInt(req.body.a.three_point_five) + 1;
+        let ooiu = parseInt(rhd.three_point_five) + 1;
         d={three_point_five:ooiu};
 
       }
       if(k == 4){
-        let ooiu = parseInt(req.body.a.four) + 1;
+        let ooiu = parseInt(rhd.four) + 1;
         d={four:ooiu};
 
       }
       if(k == 4.5){
-        let ooiu = parseInt(req.body.a.four_point_five) + 1;
+        let ooiu = parseInt(rhd.four_point_five) + 1;
         d={four_point_five:ooiu};
 
       }
       if(k == 5){
-        let ooiu = parseInt(req.body.a.five) + 1;
+        let ooiu = parseInt(rhd.five) + 1;
         d={five:ooiu};
 
       }
@@ -4237,7 +4337,43 @@ app.post('/rate_property',async function(req,res){
 });
 
 
+app.post('/send_consultation',async function(req,res){
 
+});
+
+app.get('/agents',function(req,res){
+  res.sendFile(path.join(__dirname,'agents.html'));
+})
+
+app.post('/add_agents',async function(req,res){
+
+  const docRef = await db.collection('AGENTS').add(req.body);
+  console.log('Data stored in Firebase with ID:', docRef.id);
+  res.json({message:"successful"});
+
+
+
+
+});
+
+
+app.post('/all_agents',async function(req,res){
+
+  const propertiesSnapshot = await db.collection('AGENTS').get(); // Adjust the collection name
+  const properties = propertiesSnapshot.docs.map(doc => ({
+    id: doc.id, // Get document ID
+    ...doc.data() // Get document data
+
+  
+  }));
+  //console.log(properties);
+  res.json({'agents':properties});
+
+
+
+
+
+});
 
 
 app.listen(8000, () => {

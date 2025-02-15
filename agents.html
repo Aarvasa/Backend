@@ -7,7 +7,44 @@
 </head>
 <body>
 
+    <input type="text" id="name" />
+    <input type="text" id="aarvasa_id" />
+    <input type="text" id="email_id" />
+    <input type="text" id="contact_no" />
+
+    <button id="button">SUBMIT</button>
+
+
     
     
 </body>
+
+<script>
+
+    document.getElementById("button").addEventListener("click",async function(){
+
+        let op = await fetch('http://localhost:8000/add_agents',
+      {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+
+          body : JSON.stringify({name:document.querySelector("#name").value,aarvasa_id:document.querySelector("#aarvasa_id").value,email_id:document.querySelector("#email_id").value,contact_no:document.querySelector("#contact_no").value}),
+          
+      }
+    );
+
+    let rh = await op.json();
+
+    if(rh.message=="successful"){
+        alert("successful");
+    }
+
+
+
+    });
+
+
+</script>
 </html>
