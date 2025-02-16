@@ -4852,7 +4852,7 @@ app.post('/send_consultation',async function(req,res){
        // Sender's email from request body
       to: "theaarvasa@gmail.com", // Replace with Aarvasa's email
       subject: "Consultation", // Fixed subject
-      text: "Hi, I want to consult Aarvasa", // Fixed message
+      text: "Hi, I want to consult Aarvasa" + " my name is " + req.body.name + " \n my email id is : " + req.body.email + "\n date of consultation is : " + req.body.date , // Fixed message
     };
 
     const info = await transporter.sendMail(mailOptions);
