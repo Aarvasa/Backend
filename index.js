@@ -2153,7 +2153,10 @@ app.post('/post_rent_residential_plots',async function(req,res){
 
 app.post('/all_residential_rent_properties',async function(req,res){
   const propertiesSnapshot = await db.collection('RESIDENTIAL_PLOTS').get(); // Adjust the collection name
-  const properties = propertiesSnapshot.docs.map(doc => doc.data());
+  const properties = propertiesSnapshot.docs.map(doc => ({
+    id: doc.id, // Get document ID
+    ...doc.data() // Get document data
+}));
 
   console.log(properties);
 
